@@ -17,7 +17,7 @@ function findAll(req, res, next) {
   var query;
   var post;
 
-  query="SELECT data, false 'selecionado' FROM easymovie.tbdata;";
+  query="SELECT data, false 'selecionado' FROM "+ process.env.MYSQL_ADDON_DB + ".tbdata;";
 
   connection.query(query, function(err, rows, fields) {
       if (err) throw err;
