@@ -5,12 +5,12 @@ var mysql      = require('mysql');
 
 
 var connection = mysql.createConnection({
-  host     : 'b1q8husmi-mysql.services.clever-cloud.com',
-  user     : 'unxcjdfsmma6sjcu',
-  password : 'aGaNXlJ08feLpUpSa9e',
-  database : 'easymovie',
-  port     : '3306'
+      host     : process.env.MYSQL_ADDON_HOST,
+      database : process.env.MYSQL_ADDON_DB,
+      user     : process.env.MYSQL_ADDON_USER,
+      password : process.env.MYSQL_ADDON_PASSWORD
 });
+
 
 
 function findAll(req, res, next) {
