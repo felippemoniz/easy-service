@@ -5,11 +5,12 @@ var mysql      = require('mysql');
 
 
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'admin',
-  database : 'easymovie'
+      host     : process.env.MYSQL_ADDON_HOST,
+      database : process.env.MYSQL_ADDON_DB,
+      user     : process.env.MYSQL_ADDON_USER,
+      password : process.env.MYSQL_ADDON_PASSWORD
 });
+
 
 
 
@@ -36,9 +37,9 @@ function findAll(req, res, next) {
   "tbfilme.notaimdb, "+
   "tbfilme.imagem "+
   "FROM "+
-  "easymovie.tbtitulo tbTitulo,"+
-  "easymovie.tbfilme tbFilme,"+
-  "easymovie.tbtitulofilme tbtitulofilme "+
+  process.env.MYSQL_ADDON_DB + ".tbtitulo tbTitulo,"+
+  process.env.MYSQL_ADDON_DB + ".tbfilme tbFilme,"+
+   process.env.MYSQL_ADDON_DB + ".tbtitulofilme tbtitulofilme "+
   "where "+
   "tbtitulo.idTitulo = tbtitulofilme.idTitulo and "+
   "tbfilme.idfilme = tbtitulofilme.idfilme and "+
