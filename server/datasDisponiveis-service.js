@@ -5,9 +5,9 @@ var mysql      = require('mysql');
 
 
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'admin',
+  host     : 'b1q8husmi-mysql.services.clever-cloud.com',
+  user     : 'unxcjdfsmma6sjcu',
+  password : 'aGaNXlJ08feLpUpSa9e',
   database : 'easymovie',
   port     : '3306'
 });
