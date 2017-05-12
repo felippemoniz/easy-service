@@ -19,6 +19,8 @@ function findAll(req, res, next) {
 
   query="SELECT data, false 'selecionado' FROM "+ process.env.MYSQL_ADDON_DB + ".tbdata;";
 
+console.log(query);
+
   connection.query(query, function(err, rows, fields) {
       if (err) throw err;
       res.json(rows);

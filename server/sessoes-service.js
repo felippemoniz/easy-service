@@ -55,6 +55,7 @@ function findById(req, res, next) {
   "(tbfilme.tipo IN ("+preferencia+") or tbfilme.tipo3d IN ("+preferencia+"))" +
   "order by horario asc";
 
+  console.log(query);
 
   /*
   query="select * from easymovie.tbFilme filme, easymovie.tbhorario horario, easymovie.tbcinema cinema where horario.idfilme in ("+id+") and  horario.data='"+data.substring(0,10)+"' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema order by horario asc";

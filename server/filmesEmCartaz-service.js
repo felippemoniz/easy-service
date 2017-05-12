@@ -45,6 +45,8 @@ function findAll(req, res, next) {
   "tbfilme.idfilme = tbtitulofilme.idfilme and "+
   "(tbfilme.tipo IN ("+filtro+") or tbfilme.tipo3d IN ("+filtro+")) order by qtacessos desc, nome asc";
 
+  console.log(query);
+
   
   /*
   query="select distinct idfilme id, nome, genero, sinopse, poster, classificacao, duracao, notaimdb, imagem,tipo, qtacessos, sala, tipo3d, false selecionado from easymovie.tbfilme " +
