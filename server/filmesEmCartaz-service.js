@@ -29,7 +29,7 @@ function findAll(req, res, next) {
   "tbTitulo.nome,"+
   "tbTitulo.selecionado,"+
   "tbTitulo.qtacessos,"+
-  "tbfilme.genero, "+
+  /*"tbfilme.genero, "+*/
   "tbfilme.sinopse, "+
   "tbfilme.poster, "+
   "tbfilme.classificacao, "+
