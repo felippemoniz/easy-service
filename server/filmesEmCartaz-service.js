@@ -29,21 +29,21 @@ function findAll(req, res, next) {
   "tbTitulo.nome,"+
   "tbTitulo.selecionado,"+
   "tbTitulo.qtacessos,"+
-  /*"tbfilme.genero, "+*/
-  "tbfilme.sinopse, "+
-  "tbfilme.poster, "+
-  "tbfilme.classificacao, "+
-  "tbfilme.duracao, "+
-  "tbfilme.notaimdb, "+
-  "tbfilme.imagem "+
+  "tbFilme.genero, "+
+  "tbFilme.sinopse, "+
+  "tbFilme.poster, "+
+  "tbFilme.classificacao, "+
+  "tbFilme.duracao, "+
+  "tbFilme.notaimdb, "+
+  "tbFilme.imagem "+
   "FROM "+
   process.env.MYSQL_ADDON_DB + ".tbtitulo tbTitulo,"+
   process.env.MYSQL_ADDON_DB + ".tbfilme tbFilme,"+
    process.env.MYSQL_ADDON_DB + ".tbtitulofilme tbtitulofilme "+
   "where "+
   "tbtitulo.idTitulo = tbtitulofilme.idTitulo and "+
-  "tbfilme.idfilme = tbtitulofilme.idfilme and "+
-  "(tbfilme.tipo IN ("+filtro+") or tbfilme.tipo3d IN ("+filtro+")) order by qtacessos desc, nome asc";
+  "tbFilme.idfilme = tbtitulofilme.idfilme and "+
+  "(tbFilme.tipo IN ("+filtro+") or tbFilme.tipo3d IN ("+filtro+")) order by qtacessos desc, nome asc";
 
   console.log(query);
 

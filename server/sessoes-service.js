@@ -45,14 +45,14 @@ function findById(req, res, next) {
    process.env.MYSQL_ADDON_DB + ".tbhorario tbhorario " +
   "where " +
   "tbTitulo.idTitulo in ("+id+") and  " +
-  "tbtitulo.idTitulo = tbtitulofilme.idTitulo and " +
-  "tbfilme.idfilme = tbtitulofilme.idfilme and " +
+  "tbTitulo.idTitulo = tbtitulofilme.idTitulo and " +
+  "tbFilme.idfilme = tbtitulofilme.idfilme and " +
   "tbhorario.data='"+data.substring(0,10)+"' and " +
   "tbhorario.idfilme = tbFilme.idfilme and " +
   "tbhorario.idcinema = tbcinema.idcinema and " +
-  "tbtitulo.idTitulo = tbtitulofilme.idTitulo and " +
-  "tbfilme.idfilme = tbtitulofilme.idfilme and" +
-  "(tbfilme.tipo IN ("+preferencia+") or tbfilme.tipo3d IN ("+preferencia+"))" +
+  "tbTitulo.idTitulo = tbtitulofilme.idTitulo and " +
+  "tbFilme.idfilme = tbtitulofilme.idfilme and" +
+  "(tbFilme.tipo IN ("+preferencia+") or tbFilme.tipo3d IN ("+preferencia+"))" +
   "order by horario asc";
 
   console.log(query);
