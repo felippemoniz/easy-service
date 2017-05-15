@@ -41,7 +41,7 @@ function findAll(req, res, next) {
   process.env.MYSQL_ADDON_DB + ".tbfilme tbFilme,"+
    process.env.MYSQL_ADDON_DB + ".tbtitulofilme tbtitulofilme "+
   "where "+
-  "tbtitulo.idTitulo = tbtitulofilme.idTitulo and "+
+  "tbTitulo.idTitulo = tbtitulofilme.idTitulo and "+
   "tbFilme.idfilme = tbtitulofilme.idfilme and "+
   "(tbFilme.tipo IN ("+filtro+") or tbFilme.tipo3d IN ("+filtro+")) order by qtacessos desc, nome asc";
 
