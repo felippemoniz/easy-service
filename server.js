@@ -4,6 +4,7 @@ var bodyParser = require('body-parser')
 var filmes = require('./server/filmesEmCartaz-service')
 var datas = require('./server/datasDisponiveis-service')
 var sessoes = require('./server/sessoes-service')
+var cinemas = require('./server/cinemas-service')
 var datasDisponiveis = require('./server/datasDisponiveis-service')
 var cors = require('cors')
 
@@ -14,6 +15,8 @@ app.use(bodyParser.json());
 
 
 app.get('/filmesEmCartaz/:filtro', filmes.findAll);
+
+app.get('/cinemas/', cinemas.findAll);
 
 app.get('/filmesEmCartaz/', filmes.findAll);
 

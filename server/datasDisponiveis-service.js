@@ -1,4 +1,3 @@
-var parser = require('xml2json');
 var mysql      = require('mysql');
 var config      = require('./config');
 
