@@ -113,7 +113,7 @@ function contabilizaAcesso(id){
 
   console.log("===>" + id)
 
-  query="UPDATE  " + config.database + ".tbTitulo SET qtacessos = qtacessos + 1  WHERE idTitulo in ("+ id + ")";
+  query="UPDATE  " + config.database + ".tbtitulo SET qtacessos = qtacessos + 1  WHERE idTitulo in ("+ id + ")";
 
   connection.query(query, id, function(err, rows, fields) {
       if (err) throw err;
