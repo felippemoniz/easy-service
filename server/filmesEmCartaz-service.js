@@ -45,7 +45,7 @@ function findAll(req, res, next) {
   "tbFilme.idfilme = tbtitulofilme.idfilme and "+
   "(tbFilme.tipo IN ("+filtro+") or tbFilme.tipo3d IN ("+filtro+")) order by qtacessos desc, nome asc";
 
-  console.log(query);
+  console.log("Consultei os filmes em cartaz");
 
   
   /*

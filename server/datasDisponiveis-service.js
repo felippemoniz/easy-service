@@ -19,7 +19,7 @@ function findAll(req, res, next) {
 
   query="SELECT data, false 'selecionado' FROM "+ config.database + ".tbdata;";
 
-console.log(query);
+  console.log("Consultei as datas");
 
   connection.query(query, function(err, rows, fields) {
       if (err) throw err;

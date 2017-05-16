@@ -47,7 +47,7 @@ function findById(req, res, next) {
   "(tbFilme.tipo IN ("+preferencia+") or tbFilme.tipo3d IN ("+preferencia+"))" +
   "order by horario asc";
 
-  console.log(query);
+  console.log("Consultei as sessões escolhidas");
 
   /*
   query="select * from easymovie.tbFilme filme, easymovie.tbhorario horario, easymovie.tbcinema cinema where horario.idfilme in ("+id+") and  horario.data='"+data.substring(0,10)+"' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema order by horario asc";
@@ -72,7 +72,7 @@ function findNow(req, res, next) {
   //query = "select * from easymovie.tbFilme filme, easymovie.tbhorario horario, easymovie.tbcinema cinema where horario.data='"+retornaDataAtual()+"' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema and horario between "+horaAtual+" and "+horaAtualMais2Horas+" order by horario asc";
 query = "select * from  " + config.database + ".tbfilme filme, " + config.database + ".tbhorario horario, " + config.database + ".tbcinema cinema where horario.data='2017-04-07' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema and horario between "+horaAtual+" and "+horaAtualMais2Horas+" order by horario asc";
 
-console.log(query);
+console.log("Consultei as sessões AGORA");
 
   connection.query(query, function(err, rows, fields) {
       if (err) throw err;
@@ -111,9 +111,9 @@ function calculaHoraFim(time, minsToAdd) {
 
 function contabilizaAcesso(id){
 
-  console.log("===>" + id)
-
   query="UPDATE  " + config.database + ".tbtitulo SET qtacessos = qtacessos + 1  WHERE idTitulo in ("+ id + ")";
+
+  console.log("Contabilizei os acessos")
 
   connection.query(query, id, function(err, rows, fields) {
       if (err) throw err;
