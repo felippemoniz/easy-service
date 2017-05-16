@@ -1,14 +1,14 @@
-var PROPERTIES = require('./mock-filmesEmCartaz').data
 var parser = require('xml2json');
 var mysql      = require('mysql');
+var config      = require('./config');
 
 
 
 var connection = mysql.createConnection({
-      host     : process.env.MYSQL_ADDON_HOST,
-      database : process.env.MYSQL_ADDON_DB,
-      user     : process.env.MYSQL_ADDON_USER,
-      password : process.env.MYSQL_ADDON_PASSWORD
+      host     : config.host,
+      database : config.database,
+      user     : config.user,
+      password : config.password
 });
 
 
@@ -37,9 +37,9 @@ function findAll(req, res, next) {
   "tbFilme.notaimdb, "+
   "tbFilme.imagem "+
   "FROM "+
-  process.env.MYSQL_ADDON_DB + ".tbtitulo tbTitulo,"+
-  process.env.MYSQL_ADDON_DB + ".tbfilme tbFilme,"+
-   process.env.MYSQL_ADDON_DB + ".tbtitulofilme tbtitulofilme "+
+  config.database + ".tbtitulo tbTitulo,"+
+  config.database + ".tbfilme tbFilme,"+
+  config.database + ".tbtitulofilme tbtitulofilme "+
   "where "+
   "tbTitulo.idTitulo = tbtitulofilme.idTitulo and "+
   "tbFilme.idfilme = tbtitulofilme.idfilme and "+

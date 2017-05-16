@@ -1,14 +1,14 @@
-var PROPERTIES = require('./mock-datasDisponiveis').data
 var parser = require('xml2json');
 var mysql      = require('mysql');
+var config      = require('./config');
 
 
 
 var connection = mysql.createConnection({
-      host     : process.env.MYSQL_ADDON_HOST,
-      database : process.env.MYSQL_ADDON_DB,
-      user     : process.env.MYSQL_ADDON_USER,
-      password : process.env.MYSQL_ADDON_PASSWORD
+      host     : config.host,
+      database : config.database,
+      user     : config.user,
+      password : config.password
 });
 
 
@@ -17,7 +17,7 @@ function findAll(req, res, next) {
   var query;
   var post;
 
-  query="SELECT data, false 'selecionado' FROM "+ process.env.MYSQL_ADDON_DB + ".tbdata;";
+  query="SELECT data, false 'selecionado' FROM "+ config.database + ".tbdata;";
 
 console.log(query);
 

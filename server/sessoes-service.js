@@ -1,25 +1,17 @@
-var PROPERTIES = require('./mock-filmesEmCartaz').data
 var parser = require('xml2json');
 var mysql      = require('mysql');
+var config      = require('./config');
 
 
 
 var connection = mysql.createConnection({
-      host     : process.env.MYSQL_ADDON_HOST,
-      database : process.env.MYSQL_ADDON_DB,
-      user     : process.env.MYSQL_ADDON_USER,
-      password : process.env.MYSQL_ADDON_PASSWORD
+      host     : config.host,
+      database : config.database,
+      user     : config.user,
+      password : config.password
 });
 
 
-/*
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'admin',
-  database : 'easymovie'
-});
-*/
 
 
 function findAll(req, res, next) {
@@ -38,11 +30,11 @@ function findById(req, res, next) {
 
   query="select * "+
   "from " +
-   process.env.MYSQL_ADDON_DB + ".tbtitulo tbTitulo," +
-   process.env.MYSQL_ADDON_DB + ".tbfilme tbFilme," +
-   process.env.MYSQL_ADDON_DB + ".tbtitulofilme tbtitulofilme," +
-   process.env.MYSQL_ADDON_DB + ".tbcinema tbcinema," +
-   process.env.MYSQL_ADDON_DB + ".tbhorario tbhorario " +
+   config.database + ".tbtitulo tbTitulo," +
+   config.database + ".tbfilme tbFilme," +
+   config.database + ".tbtitulofilme tbtitulofilme," +
+   config.database + ".tbcinema tbcinema," +
+   config.database + ".tbhorario tbhorario " +
   "where " +
   "tbTitulo.idTitulo in ("+id+") and  " +
   "tbTitulo.idTitulo = tbtitulofilme.idTitulo and " +
@@ -78,7 +70,7 @@ function findNow(req, res, next) {
   var horaAtualMais2Horas = calculaHoraFim(dataAtual.getHours().toString() + ":" + dataAtual.getMinutes().toString(),120)
 
   //query = "select * from easymovie.tbFilme filme, easymovie.tbhorario horario, easymovie.tbcinema cinema where horario.data='"+retornaDataAtual()+"' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema and horario between "+horaAtual+" and "+horaAtualMais2Horas+" order by horario asc";
-query = "select * from  " + process.env.MYSQL_ADDON_DB + ".tbFilme filme, " + process.env.MYSQL_ADDON_DB + ".tbhorario horario, " + process.env.MYSQL_ADDON_DB + ".tbcinema cinema where horario.data='2017-04-07' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema and horario between "+horaAtual+" and "+horaAtualMais2Horas+" order by horario asc";
+query = "select * from  " + config.database + ".tbfilme filme, " + config.database + ".tbhorario horario, " + config.database + ".tbcinema cinema where horario.data='2017-04-07' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema and horario between "+horaAtual+" and "+horaAtualMais2Horas+" order by horario asc";
 
   connection.query(query, function(err, rows, fields) {
       if (err) throw err;
@@ -119,7 +111,7 @@ function contabilizaAcesso(id){
 
   console.log("===>" + id)
 
-  query="UPDATE  " + process.env.MYSQL_ADDON_DB + ".tbTitulo SET qtacessos = qtacessos + 1  WHERE idTitulo in ("+ id + ")";
+  query="UPDATE  " + config.database + ".tbTitulo SET qtacessos = qtacessos + 1  WHERE idTitulo in ("+ id + ")";
 
   connection.query(query, id, function(err, rows, fields) {
       if (err) throw err;
