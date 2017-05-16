@@ -72,6 +72,8 @@ function findNow(req, res, next) {
   //query = "select * from easymovie.tbFilme filme, easymovie.tbhorario horario, easymovie.tbcinema cinema where horario.data='"+retornaDataAtual()+"' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema and horario between "+horaAtual+" and "+horaAtualMais2Horas+" order by horario asc";
 query = "select * from  " + config.database + ".tbfilme filme, " + config.database + ".tbhorario horario, " + config.database + ".tbcinema cinema where horario.data='2017-04-07' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema and horario between "+horaAtual+" and "+horaAtualMais2Horas+" order by horario asc";
 
+console.log(query);
+
   connection.query(query, function(err, rows, fields) {
       if (err) throw err;
       res.json(rows);
