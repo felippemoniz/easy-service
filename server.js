@@ -16,6 +16,8 @@ app.use(bodyParser.json());
 
 app.get('/filmesEmCartaz/:filtro', filmes.findAll);
 
+app.get('/sessoesPorCinema/:id/:data/:preferencia', sessoes.findByTheater);
+
 app.get('/cinemas/', cinemas.findAll);
 
 app.get('/filmesEmCartaz/', filmes.findAll);
@@ -29,5 +31,3 @@ app.get('/datasDisponiveis', datas.findAll);
 
 
 app.listen(8080)
-
-

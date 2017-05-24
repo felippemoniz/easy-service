@@ -48,17 +48,55 @@ function findById(req, res, next) {
 
   console.log("Consultei as sessões escolhidas");
 
-  /*
-  query="select * from easymovie.tbFilme filme, easymovie.tbhorario horario, easymovie.tbcinema cinema where horario.idfilme in ("+id+") and  horario.data='"+data.substring(0,10)+"' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema order by horario asc";
-  */
-  
   connection.query(query, id, function(err, rows, fields) {
       if (err) throw err;
       contabilizaAcesso(id);
       res.json(rows);
   });
-  
+
 }
+
+
+function findByTheater(req, res, next) {
+  var query;
+  var post;
+  var id = req.params.id;
+  var data = req.params.data;
+  var preferencia = req.params.preferencia;
+
+  console.log(preferencia)
+
+  query="select * "+
+  "from " +
+   config.database + ".tbtitulo tbTitulo," +
+   config.database + ".tbfilme tbFilme," +
+   config.database + ".tbtitulofilme tbtitulofilme," +
+   config.database + ".tbcinema tbcinema," +
+   config.database + ".tbhorario tbhorario " +
+  "where " +
+  "tbcinema.idcinema in ("+id+") and  " +
+  "tbTitulo.idTitulo = tbtitulofilme.idTitulo and " +
+  "tbFilme.idfilme = tbtitulofilme.idfilme and " +
+  "tbhorario.data='"+data.substring(0,10)+"' and " +
+  "tbhorario.idfilme = tbFilme.idfilme and " +
+  "tbhorario.idcinema = tbcinema.idcinema and " +
+  "tbTitulo.idTitulo = tbtitulofilme.idTitulo and " +
+  "tbFilme.idfilme = tbtitulofilme.idfilme and" +
+  "(tbFilme.tipo IN ("+preferencia+") or tbFilme.tipo3d IN ("+preferencia+"))" +
+  "order by horario asc";
+
+  console.log(query);
+
+  connection.query(query, id, function(err, rows, fields) {
+      if (err) throw err;
+      contabilizaAcesso(id);
+      res.json(rows);
+  });
+
+
+
+}
+
 
 
 function findNow(req, res, next) {
@@ -77,7 +115,7 @@ console.log("Consultei as sessões AGORA");
       if (err) throw err;
       res.json(rows);
   });
-  
+
 }
 
 
@@ -101,9 +139,9 @@ function calculaHoraFim(time, minsToAdd) {
   var bits = time.split(':');
   var mins = bits[0]*60 + (+bits[1]) + (+minsToAdd);
 
-  return z(mins%(24*60)/60 | 0) + '' + z(mins%60);  
+  return z(mins%(24*60)/60 | 0) + '' + z(mins%60);
 
-}  
+}
 
 
 
@@ -131,3 +169,4 @@ exports.findAll = findAll;
 exports.findById = findById;
 exports.like = like;
 exports.findNow = findNow;
+exports.findByTheater = findByTheater;
