@@ -64,7 +64,6 @@ function findByTheater(req, res, next) {
   var data = req.params.data;
   var preferencia = req.params.preferencia;
 
-  console.log(preferencia)
 
   query="select * "+
   "from " +
@@ -85,7 +84,7 @@ function findByTheater(req, res, next) {
   "(tbFilme.tipo IN ("+preferencia+") or tbFilme.tipo3d IN ("+preferencia+"))" +
   "order by horario asc";
 
-  console.log(query);
+  console.log("Consultei as sessões por cinemas escolhidas");
 
   connection.query(query, id, function(err, rows, fields) {
       if (err) throw err;
