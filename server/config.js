@@ -3,7 +3,7 @@ module.exports = Object.freeze({
       database : process.env.MYSQL_ADDON_DB,
       user     : process.env.MYSQL_ADDON_USER,
       password : process.env.MYSQL_ADDON_PASSWORD 
-     /* host     : 'localhost',
+    /*  host     : 'localhost',
   	  user     : 'root',
   	  password : 'admin',
       database : 'easymovie' */
