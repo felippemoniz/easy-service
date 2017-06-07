@@ -102,11 +102,12 @@ function findNow(req, res, next) {
   var query;
   var post;
   var dataAtual = new Date();
-  var horaAtual = dataAtual.getHours().toString() + dataAtual.getMinutes().toString();
+  var horaAtual = ("0" + (dataAtual.getHours())).slice(-2) + ("0" + (dataAtual.getMinutes())).slice(-2);
   var horaAtualMais2Horas = calculaHoraFim(dataAtual.getHours().toString() + ":" + dataAtual.getMinutes().toString(),120)
 
-  //query = "select * from easymovie.tbFilme filme, easymovie.tbhorario horario, easymovie.tbcinema cinema where horario.data='"+retornaDataAtual()+"' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema and horario between "+horaAtual+" and "+horaAtualMais2Horas+" order by horario asc";
-query = "select * from  " + config.database + ".tbfilme filme, " + config.database + ".tbhorario horario, " + config.database + ".tbcinema cinema where horario.data='2017-04-07' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema and horario between "+horaAtual+" and "+horaAtualMais2Horas+" order by horario asc";
+console.log(horaAtual)
+
+query = "select * from  " + config.database + ".tbfilme filme, " + config.database + ".tbhorario horario, " + config.database + ".tbcinema cinema where horario.data='2017-06-02' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema and horario between "+horaAtual+" and "+horaAtualMais2Horas+" order by horario asc";
 
 console.log("Consultei as sessões AGORA");
 

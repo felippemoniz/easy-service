@@ -57,14 +57,15 @@ function recuperaInfo(nome){
 	var res = request('GET', 'http://api.themoviedb.org/3/search/movie?query=&query='+nome+'&language=pt-BR&api_key=5fbddf6b517048e25bc3ac1bbeafb919');
   json=JSON.parse(res.getBody());
 
+/*
   if (json.total_results > 0){
     console.log("Pegando IMDB")
-    res2 = request('GET', 'http://www.omdbapi.com/?t='+json.results[0].original_title);
+    res2 = request('GET', 'http://www.omdbapi.com/?t='+json.results[0].original_title+'&apikey=5e485ed3');
     json2=JSON.parse(res2.getBody());
     console.log(json2.imdbRating)
     json.results[0].imdb = json2.imdbRating
   }
-
+*/
 	console.log("SERVICO OK COM :" + nome)
 	return json;
 

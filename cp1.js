@@ -19,11 +19,28 @@ connection.connect();
 
 //################## EXECUCAO DA CARGA DAS TABELAS ######################
 console.log("### INICIO DA CARGA ####");
+truncateTables();
 gravaDatasDisponiveis();
+carregaTabelasComplementares();
 console.log("### FIM DA CARGA #####");
 //#######################################################################
 
 
+
+function truncateTables(){
+	var query1 = connection.query('truncate table easymovie.tbdata', function(err, fields) {console.log(err);});
+	var query2 = connection.query('truncate table easymovie.tbfilme', function(err, fields) {console.log(err);});
+	var query3 = connection.query('truncate table easymovie.tbhorario', function(err, fields) {console.log(err);});
+	var query4 = connection.query('truncate table easymovie.tbtitulo', function(err, fields) {console.log(err);});
+	var query5 = connection.query('truncate table easymovie.tbtitulofilme', function(err, fields) {console.log(err);});
+	console.log("Tabelas truncadas")
+}
+
+function carregaTabelasComplementares(){
+	console.log("Carregando Tabelas complementares")
+	var query1 = connection.query('insert into easymovie.tbtitulo select distinct null,nome,0,0 from easymovie.tbfilme', function(err, result) {console.log(err);});
+	var query2 = connection.query('insert into easymovie.tbtitulofilme select tbtitulo.idTitulo, tbfilme.idfilme from easymovie.tbtitulo tbtitulo, easymovie.tbfilme tbfilme where tbfilme.nome=tbtitulo.nome', function(err, result) {console.log(err);});
+}
 
 
 
@@ -42,6 +59,7 @@ function gravaDatasDisponiveis(){
 	   for(var i = 0; i < jsonDatas.length; i++) {
 			 post  = {dtcarga: new Date() , data: jsonDatas[i]};
 			 query = connection.query('INSERT INTO tbdata SET ?', post, function(err, result) {console.log(err);});
+			 console.log("Data:" + jsonDatas[i])
 			 gravaFilmesEmCartaz(jsonDatas[i])
 	   }
 }
@@ -76,7 +94,7 @@ function gravaSessoes(json,data){
 						 data : data}
 
 				querySessao = connection.query('INSERT INTO tbhorario SET ?', postSessao, function(err, result) {
-				//console.log("-----Sessão")
+				console.log("-----Sessão")
 	        	});
 	    	}
 
@@ -150,15 +168,15 @@ function gravaFilmesEmCartaz(data){
 						sala = "Sala Platinum"
 					}
 
-					if (nome.indexOf("SALA VIP")) > 0){
+					if (nome.indexOf("SALA VIP") > 0){
 						sala = "Sala Vip"
 					}
 
-					if (nome.indexOf("SALA XD")) > 0){
+					if (nome.indexOf("SALA XD") > 0){
 						sala = "Sala XD"
 					}
 
-					if (nome.indexOf("POLTRONAS DBOX")) > 0){
+					if (nome.indexOf("POLTRONAS DBOX") > 0){
 						sala = "Sala D-BOX"
 					}
 
@@ -196,7 +214,7 @@ function gravaFilmesEmCartaz(data){
         		qtacessos: 0}
 
             	queryFilme = connection.query('INSERT INTO tbfilme SET ?', postFilme, function(err, result) {
-            			//console.log("Filme")
+            			console.log("Filme")
 			});
 
 		}

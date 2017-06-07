@@ -37,6 +37,7 @@ function findAll(req, res, next) {
 
 
 
+
 function findById(req, res, next) {
     var id = req.params.id;
     res.json(PROPERTIES[id - 1]);
