@@ -20,8 +20,6 @@ function findAll(req, res, next) {
   var filtro = req.params.filtro;
 
 
-
-
   query= "SELECT "+
   "distinct "+
   "tbTitulo.idTitulo id,"+
@@ -46,16 +44,6 @@ function findAll(req, res, next) {
 
   console.log("Consultei os filmes em cartaz");
 
-  
-  /*
-  query="select distinct idfilme id, nome, genero, sinopse, poster, classificacao, duracao, notaimdb, imagem,tipo, qtacessos, sala, tipo3d, false selecionado from easymovie.tbfilme " +
-  "where (tipo IN ("+filtro+") or tipo3d IN ("+filtro+")) order by qtacessos desc, nome asc" ;
-  
-
-  query = "SELECT distinct tbTitulo.*, tbfilme.genero, tbfilme.sinopse, tbfilme.poster, tbfilme.classificacao, tbfilme.duracao, tbfilme.notaimdb, tbfilme.imagem FROM easymovie.tbtitulo tbTitulo,easymovie.tbfilme tbFilme where tbTitulo.nome = tbfilme.nome and "+
-          "(tbfilme.tipo IN ("+filtro+") or tbfilme.tipo3d IN ("+filtro+")) order by tbTitulo.nome";
-*/
-
   connection.query(query, function(err, rows, fields) {
       if(err) {
         throw err;
@@ -67,6 +55,29 @@ function findAll(req, res, next) {
 
 }
 
+
+
+function getTop6(req, res, next) {
+
+ var query;
+  var post;
+  var filtro = req.params.filtro;
+
+
+  query= "SELECT * FROM "+config.database +".tbfilme order by qtacessos desc limit 6";
+
+  console.log("Consultei os top 6");
+
+  connection.query(query, function(err, rows, fields) {
+      if(err) {
+        throw err;
+      }else{
+        res.json(rows);
+      }
+
+  });
+
+}
 
 
 function findById(req, res, next) {
@@ -86,5 +97,6 @@ function like(req, res, next) {
 
 
 exports.findAll = findAll;
+exports.getTop6 = getTop6;
 exports.findById = findById;
 exports.like = like;
