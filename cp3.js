@@ -6,21 +6,24 @@ var fs = require('fs');
 var request = require('sync-request');
 
 
-
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : 'admin',
-  database : 'easymovie'
+  database : 'easymovie',
+  connectionLimit: 10,
+  acquireTimeout: 1000000 ,
+  port: 3306
 });
 
 
+var valoresInsert =[];
 
-connection.connect();
+
 
 //################## EXECUCAO DA CARGA DAS TABELAS ######################
 console.log("### INICIO DA CARGA ####");
-incluirCinemas(12);
+//incluirCinemas(12);
 incluirFilmes(12);
 console.log("### FIM DA CARGA #####");
 //#######################################################################
@@ -84,12 +87,18 @@ function incluirFilmes(idcidade){
 
   var jsonFilmes;
   var i;
-  var res = request('GET', 'https://api-content.ingresso.com/v0/templates/nowplaying/'+idcidade);
+  var trailer;
+  var res = request('GET', 'https://api-content.ingresso.com/v0/events/city/'+idcidade);
   var respostaString = res.getBody().toString();
   jsonFilmes=JSON.parse(respostaString);
 
-  for(i = 0; i < jsonFilmes.length; i++) {
+  for(i = 0; i < jsonFilmes.length; i++) { 
 
+     //#Tratando campos nao obrigatórios antes de incluir
+     if (jsonFilmes[i].trailers[0]) {
+         trailer = jsonFilmes[i].trailers[0].url;
+      }
+     //-------------------------------------------------
      post  = {
        idfilme : jsonFilmes[i].id,
        nome : jsonFilmes[i].title,
@@ -102,20 +111,25 @@ function incluirFilmes(idcidade){
        genero : concatenaVetor(jsonFilmes[i].genres),
        poster : jsonFilmes[i].images[0].url,
        imagem : jsonFilmes[i].images[1].url,
-       linktrailer : jsonFilmes[i].trailers[0].url,
+       linktrailer : trailer,
        selecionado : 0,
        qtacesso : 0
      }
 
-    query = connection.query('INSERT INTO tbfilme SET ?', post, function(err, result) {
-        if (err) {console.log(err);}
-    });
+   // query = connection.query('INSERT INTO tbfilme SET ?', post, function(err, result) {
+   //     if (err) {console.log(err);}
+  //  });
 
-  //console.log("incluindo sessoes de:" + jsonFilmes[i].title)
-  incluirSessoes(jsonFilmes[i].id,idcidade)
 
+   incluirSessoes(jsonFilmes[i].id,idcidade)
 
   }
+
+
+  query = connection.query('INSERT INTO tbsessao (idsessao,data,diasemana,idcinema,idfilme,diames,hora,tipo) values ?', [valoresInsert], function(err, result) {
+      if (err) {console.log(err);}
+  });
+
 
   console.log(i+"-Filmes incluidos");
 
@@ -129,9 +143,12 @@ function incluirSessoes(idfilme,idcidade){
   var z;
   var idsessao ,data, diasemana,idcinema,idfilme,diames,hora, tipo;
 
+
   var res = request('GET', 'https://api-content.ingresso.com/v0/sessions/city/'+idcidade+'/event/'+ idfilme);
   var respostaString = res.getBody().toString();
   jsonSessoes=JSON.parse(respostaString);
+
+
 
   for (var i = 0; i < jsonSessoes.length; i++) {
     data = jsonSessoes[i].date;
@@ -147,29 +164,18 @@ function incluirSessoes(idfilme,idcidade){
               tipo = concatenaVetor(jsonSalas[z].type);
               hora= jsonSalas[z].date.hour;
               diames = jsonSalas[z].date.dayAndMonth;
-              //console.log(data + "-" + hora + "-" + diasemana)
-              post  = {
-                  idsessao : idsessao,
-                  data : data,
-                  diasemana : diasemana,
-                  idcinema : idcinema,
-                  idfilme : idfilme,
-                  diames : diames,
-                  hora : hora.replace(":",""),
-                  tipo : tipo
-              }
-
-              query = connection.query('INSERT INTO tbsessao SET ?', post, function(err, result) {
-                  if (err) {console.log(err);}
-              });
+              
+              valoresInsert.push([idsessao,data,diasemana,idcinema,idfilme,diames,hora.replace(":",""),tipo])
 
            }
 
       }
 
   }
-console.log(z+"-Sessoes incluidas");
+
+
 }
 
 
 connection.end();
+

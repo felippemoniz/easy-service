@@ -17,6 +17,7 @@ function findAll(req, res, next) {
   var post;
 
   query="SELECT data, false 'selecionado' FROM "+ config.database + ".tbdata;";
+  //SELECT distinct(data) FROM easymovie.tbsessao order by data asc
 
   console.log("Consultei as datas");
 

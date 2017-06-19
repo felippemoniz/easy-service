@@ -20,27 +20,13 @@ function findAll(req, res, next) {
   var filtro = req.params.filtro;
 
 
-  query= "SELECT "+
-  "distinct "+
-  "tbTitulo.idTitulo id,"+
-  "tbTitulo.nome,"+
-  "tbTitulo.selecionado,"+
-  "tbTitulo.qtacessos,"+
-  "tbFilme.genero, "+
-  "tbFilme.sinopse, "+
-  "tbFilme.poster, "+
-  "tbFilme.classificacao, "+
-  "tbFilme.duracao, "+
-  "tbFilme.notaimdb, "+
-  "tbFilme.imagem "+
-  "FROM "+
-  config.database + ".tbtitulo tbTitulo,"+
-  config.database + ".tbfilme tbFilme,"+
-  config.database + ".tbtitulofilme tbtitulofilme "+
-  "where "+
-  "tbTitulo.idTitulo = tbtitulofilme.idTitulo and "+
-  "tbFilme.idfilme = tbtitulofilme.idfilme and "+
-  "(tbFilme.tipo IN ("+filtro+") or tbFilme.tipo3d IN ("+filtro+")) order by qtacessos desc, nome asc";
+  query= "SELECT distinct tbfilme.* FROM " +
+          config.database +".tbfilme tbfilme,"+
+          config.database +".tbsessao tbsessao "+
+          "where "+
+          "tbfilme.idfilme = tbsessao.idfilme and "+
+          "tbsessao.data = '2017-06-19' "+
+          "order by qtacesso desc, nome asc";
 
   console.log("Consultei os filmes em cartaz");
 
