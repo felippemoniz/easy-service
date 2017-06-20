@@ -27,24 +27,17 @@ function findById(req, res, next) {
 
   console.log(preferencia)
 
-  query="select * "+
-  "from " +
-   config.database + ".tbtitulo tbTitulo," +
-   config.database + ".tbfilme tbFilme," +
-   config.database + ".tbtitulofilme tbtitulofilme," +
-   config.database + ".tbcinema tbcinema," +
-   config.database + ".tbhorario tbhorario " +
-  "where " +
-  "tbTitulo.idTitulo in ("+id+") and  " +
-  "tbTitulo.idTitulo = tbtitulofilme.idTitulo and " +
-  "tbFilme.idfilme = tbtitulofilme.idfilme and " +
-  "tbhorario.data='"+data.substring(0,10)+"' and " +
-  "tbhorario.idfilme = tbFilme.idfilme and " +
-  "tbhorario.idcinema = tbcinema.idcinema and " +
-  "tbTitulo.idTitulo = tbtitulofilme.idTitulo and " +
-  "tbFilme.idfilme = tbtitulofilme.idfilme and" +
-  "(tbFilme.tipo IN ("+preferencia+") or tbFilme.tipo3d IN ("+preferencia+"))" +
-  "order by horario asc";
+
+  query=  "SELECT * FROM " +
+  config.database + ".tbfilme tbfilme, " +
+  config.database + ".tbsessao tbsessao, " +
+  config.database + ".tbcinema tbcinema " +
+  "where  " +
+  "tbfilme.idfilme = tbsessao.idfilme and "+
+  "tbsessao.idcinema = tbcinema.idcinema and " +
+  "tbsessao.data = '2017-06-19'" +
+  "order by hora "
+
 
   console.log("Consultei as sessões escolhidas");
 
