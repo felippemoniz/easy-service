@@ -24,7 +24,7 @@ app.get('/filmesEmCartaz/', filmes.findAll);
 
 app.get('/topFilmes/', filmes.getTop6);
 
-app.get('/sessoes/:id/:data/:preferencia', sessoes.findById);
+app.get('/sessoes/:id/:data', sessoes.findById);
 
 app.get('/sessoesAgora/', sessoes.findNow);
 

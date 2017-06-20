@@ -25,7 +25,7 @@ function findAll(req, res, next) {
           config.database +".tbsessao tbsessao "+
           "where "+
           "tbfilme.idfilme = tbsessao.idfilme and "+
-          "tbsessao.data = '2017-06-19' "+
+          "tbsessao.data = '"+ filtro+"' "+
           "order by qtacesso desc, nome asc";
 
   console.log("Consultei os filmes em cartaz");

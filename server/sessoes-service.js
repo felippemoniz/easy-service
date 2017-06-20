@@ -23,16 +23,18 @@ function findById(req, res, next) {
   var post;
   var id = req.params.id;
   var data = req.params.data;
-  var preferencia = req.params.preferencia;
 
-  console.log(preferencia)
+  console.log(id)
+  console.log(data)
 
 
-  query=  "SELECT * FROM " +
+
+  query=  "SELECT * , tbfilme.nome nomeFilme, tbcinema.nome nomeCinema FROM " +
   config.database + ".tbfilme tbfilme, " +
   config.database + ".tbsessao tbsessao, " +
   config.database + ".tbcinema tbcinema " +
   "where  " +
+  "tbfilme.idfilme in ("+id+") and " +
   "tbfilme.idfilme = tbsessao.idfilme and "+
   "tbsessao.idcinema = tbcinema.idcinema and " +
   "tbsessao.data = '2017-06-19'" +
@@ -43,7 +45,7 @@ function findById(req, res, next) {
 
   connection.query(query, id, function(err, rows, fields) {
       if (err) throw err;
-      contabilizaAcesso(id);
+      //contabilizaAcesso(id);
       res.json(rows);
   });
 
