@@ -50,7 +50,7 @@ function getTop6(req, res, next) {
   var filtro = req.params.filtro;
 
 
-  query= "SELECT * FROM "+config.database +".tbfilme order by qtacessos desc limit 6";
+  query= "SELECT * FROM "+config.database +".tbfilme order by qtacesso desc limit 6";
 
   console.log("Consultei os top 6");
 

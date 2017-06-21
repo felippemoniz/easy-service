@@ -18,7 +18,7 @@ function findAll(req, res, next) {
   var post;
   var filtro = req.params.filtro;
 
-  query= "select idcinema,nomecinema,latitude,longitude,selecionado,qtacessos FROM "+ config.database + ".tbcinema"
+  query= "select * FROM "+ config.database + ".tbcinema"
 
 
   console.log("Consultei os cinemas");
