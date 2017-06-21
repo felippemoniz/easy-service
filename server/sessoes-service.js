@@ -70,8 +70,7 @@ function findByTheater(req, res, next) {
 
   connection.query(query, id, function(err, rows, fields) {
       if (err) throw err;
-      //contabilizaAcesso(id);
-      res.json(rows);
+       res.json(rows);
   });
 
 
@@ -84,26 +83,25 @@ function findNow(req, res, next) {
   var query;
   var post;
   var dataAtual = new Date();
+  var data = req.params.data;
   var horaAtual = ("0" + (dataAtual.getHours())).slice(-2) + ("0" + (dataAtual.getMinutes())).slice(-2);
-  var horaAtualMais2Horas = calculaHoraFim(dataAtual.getHours().toString() + ":" + dataAtual.getMinutes().toString(),10)
+  var horaAtualMais2Horas = calculaHoraFim(dataAtual.getHours().toString() + ":" + dataAtual.getMinutes().toString(),120)
 
-console.log(horaAtual)
+  console.log(horaAtual)
 
-query = "select * from  " + config.database + ".tbfilme filme, " + config.database + ".tbhorario horario, " + config.database + ".tbcinema cinema where horario.data='2017-06-02' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema and horario between "+horaAtual+" and "+horaAtualMais2Horas+" order by horario asc";
+  query = "select * from  " + config.database + ".tbfilme filme, " + config.database + ".tbhorario horario, " + config.database + ".tbcinema cinema where horario.data='2017-06-02' and horario.idfilme = filme.idfilme and horario.idcinema = cinema.idcinema and horario between "+horaAtual+" and "+horaAtualMais2Horas+" order by horario asc";
 
-query=  "SELECT * , tbfilme.nome nomeFilme, tbcinema.nome nomeCinema FROM " +
-config.database + ".tbfilme tbfilme, " +
-config.database + ".tbsessao tbsessao, " +
-config.database + ".tbcinema tbcinema " +
-"where  " +
-"tbfilme.idfilme = tbsessao.idfilme and "+
-"tbsessao.idcinema = tbcinema.idcinema and " +
-"tbsessao.data = '2017-06-20' and "+
-"hora between "+horaAtual+" and "+horaAtualMais2Horas+ " order by hora "
+  query=  "SELECT * , tbfilme.nome nomeFilme, tbcinema.nome nomeCinema FROM " +
+  config.database + ".tbfilme tbfilme, " +
+  config.database + ".tbsessao tbsessao, " +
+  config.database + ".tbcinema tbcinema " +
+  "where  " +
+  "tbfilme.idfilme = tbsessao.idfilme and "+
+  "tbsessao.idcinema = tbcinema.idcinema and " +
+  "tbsessao.data = '"+retornaDataAtual()+"' and "+
+  "hora between "+horaAtual+" and "+horaAtualMais2Horas+ " order by hora "
 
-console.log(query)
-
-console.log("Consultei as sessões AGORA");
+   console.log("Consultei as sessões AGORA");
 
   connection.query(query, function(err, rows, fields) {
       if (err) throw err;

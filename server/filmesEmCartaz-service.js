@@ -1,6 +1,6 @@
-var mysql      = require('mysql');
+var mysql       = require('mysql');
 var config      = require('./config');
-
+var http = require('http');
 
 
 var connection = mysql.createConnection({
@@ -9,6 +9,20 @@ var connection = mysql.createConnection({
       user     : config.user,
       password : config.password
 });
+
+
+function getEstreias(req, res, next) {
+  var cidade = req.params.cidade
+  var respostaString;
+  http.request('https://api-content.ingresso.com/v0/templates/soon/'+cidade, function (error, response, body) {
+  if (!error && response.statusCode == 200) {
+        respostaString = res.getBody().toString();
+     }
+  })
+    return JSON.parse(respostaString);
+}
+
+
 
 
 

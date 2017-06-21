@@ -26,9 +26,13 @@ app.get('/topFilmes/', filmes.getTop6);
 
 app.get('/sessoes/:id/:data', sessoes.findById);
 
-app.get('/sessoesAgora/', sessoes.findNow);
+app.get('/sessoesAgora/:data', sessoes.findNow);
 
 app.get('/datasDisponiveis', datas.findAll);
+
+app.get('/getEstreias/:cidade', filmes.getEstreias);
+
+
 
 
 

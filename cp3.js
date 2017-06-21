@@ -23,11 +23,18 @@ var valoresInsert =[];
 
 //################## EXECUCAO DA CARGA DAS TABELAS ######################
 console.log("### INICIO DA CARGA ####");
+truncateTables();
 //incluirCinemas(12);
 incluirFilmes(12);
 console.log("### FIM DA CARGA #####");
 //#######################################################################
 
+
+function truncateTables(){
+  var query1 = connection.query('truncate table easymovie.tbsessao', function(err, fields) {console.log(err);});
+  var query1 = connection.query('truncate table easymovie.tbfilme', function(err, fields) {console.log(err);});
+  console.log("Tabelas truncadas")
+}
 
 
 function incluirCinemas(idcidade){
@@ -116,9 +123,9 @@ function incluirFilmes(idcidade){
        qtacesso : 0
      }
 
-   // query = connection.query('INSERT INTO tbfilme SET ?', post, function(err, result) {
-   //     if (err) {console.log(err);}
-  //  });
+    query = connection.query('INSERT INTO tbfilme SET ?', post, function(err, result) {
+        if (err) {console.log(err);}
+    });
 
 
    incluirSessoes(jsonFilmes[i].id,idcidade)
