@@ -1,6 +1,7 @@
 var mysql       = require('mysql');
 var config      = require('./config');
-var http = require('http');
+var http        = require('http');
+var request     = require('request');
 
 
 var connection = mysql.createConnection({
@@ -12,14 +13,15 @@ var connection = mysql.createConnection({
 
 
 function getEstreias(req, res, next) {
+
   var cidade = req.params.cidade
   var respostaString;
   http.request('https://api-content.ingresso.com/v0/templates/soon/'+cidade, function (error, response, body) {
   if (!error && response.statusCode == 200) {
         respostaString = res.getBody().toString();
+        res.json(rows);
      }
   })
-    return JSON.parse(respostaString);
 }
 
 
