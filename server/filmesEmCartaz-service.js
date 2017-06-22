@@ -1,7 +1,7 @@
 var mysql       = require('mysql');
 var config      = require('./config');
 var http        = require('http');
-var request     = require('request');
+//var request     = require('request');
 
 
 var connection = mysql.createConnection({
@@ -45,6 +45,7 @@ function findAll(req, res, next) {
           "order by qtacesso desc, nome asc";
 
   console.log("Consultei os filmes em cartaz");
+
 
   connection.query(query, function(err, rows, fields) {
       if(err) {

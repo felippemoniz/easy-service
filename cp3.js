@@ -18,12 +18,13 @@ var connection = mysql.createConnection({
 
 
 var valoresInsert =[];
+var valoresInsertFilmes = [];
 
 
 
 //################## EXECUCAO DA CARGA DAS TABELAS ######################
 console.log("### INICIO DA CARGA ####");
-truncateTables();
+//truncateTables();
 //incluirCinemas(12);
 incluirFilmes(12);
 console.log("### FIM DA CARGA #####");
@@ -106,31 +107,30 @@ function incluirFilmes(idcidade){
          trailer = jsonFilmes[i].trailers[0].url;
       }
      //-------------------------------------------------
-     post  = {
-       idfilme : jsonFilmes[i].id,
-       nome : jsonFilmes[i].title,
-       classificacao : jsonFilmes[i].contentRating,
-       duracao : jsonFilmes[i].duration,
-       notaimdb : 6,
-       sinopse : jsonFilmes[i].synopsis,
-       cast : jsonFilmes[i].cast,
-       diretor : jsonFilmes[i].director,
-       genero : concatenaVetor(jsonFilmes[i].genres),
-       poster : jsonFilmes[i].images[0].url,
-       imagem : jsonFilmes[i].images[1].url,
-       linktrailer : trailer,
-       selecionado : 0,
-       qtacesso : 0
-     }
 
-    query = connection.query('INSERT INTO tbfilme SET ?', post, function(err, result) {
-        if (err) {console.log(err);}
-    });
+    valoresInsertFilmes.push([jsonFilmes[i].id,
+      jsonFilmes[i].title,
+      jsonFilmes[i].contentRating,
+      jsonFilmes[i].duration,
+      6,
+      jsonFilmes[i].synopsis,
+      jsonFilmes[i].cast,
+      jsonFilmes[i].director,
+      concatenaVetor(jsonFilmes[i].genres),
+      jsonFilmes[i].images[0].url,
+      jsonFilmes[i].images[1].url,
+      trailer,0,0
+      ])
+
 
 
    incluirSessoes(jsonFilmes[i].id,idcidade)
 
   }
+
+  //query = connection.query('INSERT INTO tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
+  //    if (err) {console.log(err);}
+  //});
 
 
   query = connection.query('INSERT INTO tbsessao (idsessao,data,diasemana,idcinema,idfilme,diames,hora,tipo) values ?', [valoresInsert], function(err, result) {
