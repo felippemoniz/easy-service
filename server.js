@@ -30,7 +30,7 @@ app.get('/sessoesAgora/:data', sessoes.findNow);
 
 app.get('/datasDisponiveis', datas.findAll);
 
-//app.get('/getEstreias/:cidade', filmes.getEstreias);
+//app.get('/getDates/:data', sessoes.getDates);
 
 
 

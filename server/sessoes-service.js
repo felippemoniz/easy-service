@@ -17,6 +17,19 @@ function findAll(req, res, next) {
 }
 
 
+function getDates(req, res, next) {
+var data = req.params.data;
+
+query="SELECT distinct(data),diasemana FROM "+config.database+" +.tbsessao " +
+      "where data >= '"+data+"' order by data asc"
+
+  connection.query(query, id, function(err, rows, fields) {
+      if (err) throw err;
+      res.json(rows);
+  });
+
+}
+
 
 function findById(req, res, next) {
   var query;
@@ -159,3 +172,4 @@ exports.findById = findById;
 exports.like = like;
 exports.findNow = findNow;
 exports.findByTheater = findByTheater;
+exports.getDates = getDates;

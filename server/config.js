@@ -6,5 +6,5 @@ module.exports = Object.freeze({
      host     : 'localhost',
   	  user     : 'root',
   	  password : 'admin',
-      database : 'easymovie'
+      database : 'easymovie' 
 });
