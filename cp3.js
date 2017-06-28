@@ -4,13 +4,14 @@ var parser = require('xml2json');
 var got = require('got');
 var fs = require('fs');
 var request = require('sync-request');
+var config      = require('./config');
 
 
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'admin',
-  database : 'easymovie',
+  host     : config.host,
+  database : config.database,
+  user     : config.user,
+  password : config.password
   connectionLimit: 10,
   acquireTimeout: 1000000 ,
   port: 3306

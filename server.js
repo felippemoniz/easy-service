@@ -30,10 +30,13 @@ app.get('/sessoesAgora/:data', sessoes.findNow);
 
 app.get('/datasDisponiveis', datas.findAll);
 
-//app.get('/getDates/:data', sessoes.getDates);
+app.get('/getDates/:data', sessoes.getDates);
+
+app.get('/oi', function(req, res) {
+  res.json({notes: "Estou funcionando!"})
+})
 
 
 
-
-
+//app.listen(21293)
 app.listen(8080)

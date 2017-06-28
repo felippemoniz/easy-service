@@ -17,18 +17,19 @@ function findAll(req, res, next) {
 }
 
 
+
 function getDates(req, res, next) {
 var data = req.params.data;
 
-query="SELECT distinct(data),diasemana FROM "+config.database+" +.tbsessao " +
+query="SELECT distinct(data),diasemana FROM "+config.database+".tbsessao " +
       "where data >= '"+data+"' order by data asc"
 
-  connection.query(query, id, function(err, rows, fields) {
+  connection.query(query, function(err, rows, fields) {
       if (err) throw err;
       res.json(rows);
   });
-
 }
+
 
 
 function findById(req, res, next) {

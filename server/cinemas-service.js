@@ -12,6 +12,7 @@ var connection = mysql.createConnection({
 
 
 
+
 function findAll(req, res, next) {
 
   var query;
@@ -20,9 +21,7 @@ function findAll(req, res, next) {
 
   query= "select * FROM "+ config.database + ".tbcinema"
 
-
   console.log("Consultei os cinemas");
-
 
   connection.query(query, function(err, rows, fields) {
       if(err) {
