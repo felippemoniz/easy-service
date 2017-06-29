@@ -20,7 +20,7 @@ function findAll(req, res, next) {
 
 function getDates(req, res, next) {
 var data = req.params.data;
-
+console.log(data)
 query="SELECT distinct(data),diasemana FROM "+config.database+".tbsessao " +
       "where data >= '"+data+"' order by data asc"
 

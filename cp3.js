@@ -1,17 +1,14 @@
 
 var mysql      = require('mysql');
-var parser = require('xml2json');
-var got = require('got');
-var fs = require('fs');
 var request = require('sync-request');
-var config      = require('./config');
+var config      = require('./server/config');
 
 
 var connection = mysql.createConnection({
   host     : config.host,
   database : config.database,
   user     : config.user,
-  password : config.password
+  password : config.password,
   connectionLimit: 10,
   acquireTimeout: 1000000 ,
   port: 3306
@@ -33,8 +30,8 @@ console.log("### FIM DA CARGA #####");
 
 
 function truncateTables(){
-  var query1 = connection.query('truncate table easymovie.tbsessao', function(err, fields) {console.log(err);});
-  var query1 = connection.query('truncate table easymovie.tbfilme', function(err, fields) {console.log(err);});
+  var query1 = connection.query('delete from easymovie.tbsessao', function(err, fields) {console.log(err);});
+  var query1 = connection.query('delete from easymovie.tbfilme', function(err, fields) {console.log(err);});
   console.log("Tabelas truncadas")
 }
 
@@ -101,7 +98,7 @@ function incluirFilmes(idcidade){
   var respostaString = res.getBody().toString();
   jsonFilmes=JSON.parse(respostaString);
 
-  for(i = 0; i < jsonFilmes.length; i++) { 
+  for(i = 0; i < jsonFilmes.length; i++) {
 
      //#Tratando campos nao obrigatórios antes de incluir
      if (jsonFilmes[i].trailers[0]) {
@@ -129,9 +126,9 @@ function incluirFilmes(idcidade){
 
   }
 
-  //query = connection.query('INSERT INTO tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
-  //    if (err) {console.log(err);}
-  //});
+//  query = connection.query('INSERT INTO tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
+//      if (err) {console.log(err);}
+//  });
 
 
   query = connection.query('INSERT INTO tbsessao (idsessao,data,diasemana,idcinema,idfilme,diames,hora,tipo) values ?', [valoresInsert], function(err, result) {
@@ -172,7 +169,7 @@ function incluirSessoes(idfilme,idcidade){
               tipo = concatenaVetor(jsonSalas[z].type);
               hora= jsonSalas[z].date.hour;
               diames = jsonSalas[z].date.dayAndMonth;
-              
+
               valoresInsert.push([idsessao,data,diasemana,idcinema,idfilme,diames,hora.replace(":",""),tipo])
 
            }
@@ -186,4 +183,3 @@ function incluirSessoes(idfilme,idcidade){
 
 
 connection.end();
-
