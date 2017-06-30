@@ -7,6 +7,7 @@ var sessoes = require('./server/sessoes-service')
 var cinemas = require('./server/cinemas-service')
 var datasDisponiveis = require('./server/datasDisponiveis-service')
 var cors = require('cors')
+var config = require('./server/config')
 
 
 app.use(cors());
@@ -33,10 +34,8 @@ app.get('/datasDisponiveis', datas.findAll);
 app.get('/getDates/:data', sessoes.getDates);
 
 app.get('/oi', function(req, res) {
-  res.json({notes: "Estou funcionando!"})
+  res.json({resposta: "Estou funcionando!"})
 })
 
 
-
-//app.listen(21293)
-app.listen(8080)
+app.listen(config.port)
