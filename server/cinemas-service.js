@@ -34,7 +34,30 @@ function findAll(req, res, next) {
 
 }
 
+function findCinemaPorSessao(req, res, next) {
+  var query;
+  var post;
+  var id = req.params.id;
+  var data = req.params.data;
 
+
+  query=  "SELECT distinct tbcinema.nome, tbcinema.idcinema, 1 selecionado FROM " +
+  config.database + ".tbfilme tbfilme, " +
+  config.database + ".tbsessao tbsessao, " +
+  config.database + ".tbcinema tbcinema " +
+  "where  " +
+  "tbfilme.idfilme in ("+id+") and " +
+  "tbfilme.idfilme = tbsessao.idfilme and "+
+  "tbsessao.idcinema = tbcinema.idcinema and " +
+  "tbsessao.data = '"+data+"'"
+
+
+  connection.query(query, id, function(err, rows, fields) {
+      if (err) throw err;
+      res.json(rows);
+  });
+
+}
 
 
 function findById(req, res, next) {
@@ -56,3 +79,4 @@ function like(req, res, next) {
 exports.findAll = findAll;
 exports.findById = findById;
 exports.like = like;
+exports.findCinemaPorSessao = findCinemaPorSessao;
