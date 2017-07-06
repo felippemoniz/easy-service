@@ -28,30 +28,31 @@ request('https://api-content.ingresso.com/v0/templates/soon/'+cidade, function (
 }
 
 
-/*
-function getTop6(req, res, next) {
-
- var query;
+function findFilmesPorSessao(req, res, next) {
+  var query;
   var post;
-  var filtro = req.params.filtro;
+  var id = req.params.id;
+  var data = req.params.data;
 
 
-  query= "SELECT * FROM "+config.database +".tbfilme order by qtacesso desc limit 6";
+  query=  "SELECT distinct tbfilme.nome nomeFilme, tbfilme.idfilme idfilme, 1 selecionado FROM " +
+  config.database + ".tbfilme tbfilme, " +
+  config.database + ".tbsessao tbsessao, " +
+  config.database + ".tbcinema tbcinema " +
+  "where  " +
+  "tbcinema.idcinema in ("+id+") and " +
+  "tbfilme.idfilme = tbsessao.idfilme and "+
+  "tbsessao.idcinema = tbcinema.idcinema and " +
+  "tbsessao.data = '"+data+"'" +
+  "order by hora "
 
-  console.log("Consultei os top 6");
-
-  connection.query(query, function(err, rows, fields) {
-      if(err) {
-        throw err;
-      }else{
-        res.json(rows);
-      }
-
+  
+  connection.query(query, id, function(err, rows, fields) {
+      if (err) throw err;
+       res.json(rows);
   });
 
 }
-*/
-
 
 
 function findAll(req, res, next) {
@@ -107,4 +108,5 @@ function like(req, res, next) {
 exports.findAll = findAll;
 exports.getTop6 = getTop6;
 exports.findById = findById;
+exports.findFilmesPorSessao = findFilmesPorSessao;
 exports.like = like;

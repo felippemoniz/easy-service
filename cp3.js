@@ -22,10 +22,12 @@ var valoresInsertFilmes = [];
 
 //################## EXECUCAO DA CARGA DAS TABELAS ######################
 console.log("### INICIO DA CARGA ####");
-//truncateTables();
+truncateTables();
 //incluirCinemas(12);
 incluirFilmes(12);
 console.log("### FIM DA CARGA #####");
+connection.end();
+console.log("### FECHANDO CONEXAO #####");
 //#######################################################################
 
 
@@ -38,7 +40,7 @@ function truncateTables(){
 
 function incluirCinemas(idcidade){
 
-  var jsonCinemas;
+ var jsonCinemas;
   var i;
   var res = request('GET', 'https://api-content.ingresso.com/v0/theaters/city/'+idcidade);
   var respostaString = res.getBody().toString();
@@ -90,7 +92,7 @@ function concatenaVetor(jsonGenero){
 }
 
 function incluirFilmes(idcidade){
-
+  console.log("inicio filme")
   var jsonFilmes;
   var i;
   var trailer;
@@ -126,14 +128,14 @@ function incluirFilmes(idcidade){
 
   }
 
-//  query = connection.query('INSERT INTO tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
+ // query = connection.query('INSERT INTO tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
 //      if (err) {console.log(err);}
 //  });
 
 
-  query = connection.query('INSERT INTO tbsessao (idsessao,data,diasemana,idcinema,idfilme,diames,hora,tipo) values ?', [valoresInsert], function(err, result) {
-      if (err) {console.log(err);}
-  });
+//  query = connection.query('INSERT INTO tbsessao (idsessao,data,diasemana,idcinema,idfilme,diames,hora,tipo) values ?', [valoresInsert], function(err, result) {
+//      if (err) {console.log(err);}
+//  });
 
 
   console.log(i+"-Filmes incluidos");
@@ -178,8 +180,9 @@ function incluirSessoes(idfilme,idcidade){
 
   }
 
+console.log("Sessoes desse filme incluidas")
 
 }
 
 
-connection.end();
+

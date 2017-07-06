@@ -19,6 +19,8 @@ app.get('/filmesEmCartaz/:filtro', filmes.findAll);
 
 app.get('/sessoesPorCinema/:id/:data', sessoes.findByTheater);
 
+app.get('/filmesPorSessao/:id/:data', filmes.findFilmesPorSessao);
+
 app.get('/cinemas/', cinemas.findAll);
 
 app.get('/filmesEmCartaz/', filmes.findAll);
