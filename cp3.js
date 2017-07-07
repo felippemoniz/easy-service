@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
   user     : config.user,
   password : config.password,
   connectionLimit: 10,
-  acquireTimeout: 1000000 ,
+  acquireTimeout: 10000000 ,
   port: 3306
 });
 
@@ -26,7 +26,7 @@ truncateTables();
 //incluirCinemas(12);
 incluirFilmes(12);
 console.log("### FIM DA CARGA #####");
-connection.end();
+connection.destroy();
 console.log("### FECHANDO CONEXAO #####");
 //#######################################################################
 
@@ -128,14 +128,14 @@ function incluirFilmes(idcidade){
 
   }
 
- // query = connection.query('INSERT INTO tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
-//      if (err) {console.log(err);}
-//  });
+  query = connection.query('INSERT INTO tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
+      if (err) {console.log(err);}
+  });
 
 
-//  query = connection.query('INSERT INTO tbsessao (idsessao,data,diasemana,idcinema,idfilme,diames,hora,tipo) values ?', [valoresInsert], function(err, result) {
-//      if (err) {console.log(err);}
-//  });
+  query = connection.query('INSERT INTO tbsessao (idsessao,data,diasemana,idcinema,idfilme,diames,hora,tipo) values ?', [valoresInsert], function(err, result) {
+      if (err) {console.log(err);}
+  });
 
 
   console.log(i+"-Filmes incluidos");
