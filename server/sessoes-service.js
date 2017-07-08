@@ -27,7 +27,6 @@ query="SELECT distinct(data),diasemana, 0 selecionado FROM "+config.database+".t
   connection.query(query, function(err, rows, fields) {
       if (err) throw err;
       res.json(rows);
-      connection.end();
   });
 }
 
@@ -58,7 +57,6 @@ function findById(req, res, next) {
       if (err) throw err;
       contabilizaAcesso(id);
       res.json(rows);
-      connection.end();
   });
 
 }
@@ -87,7 +85,7 @@ function findByTheater(req, res, next) {
   connection.query(query, id, function(err, rows, fields) {
       if (err) throw err;
        res.json(rows);
-       connection.end();
+
   });
 
 
@@ -122,7 +120,7 @@ function findNow(req, res, next) {
   connection.query(query, function(err, rows, fields) {
       if (err) throw err;
       res.json(rows);
-      connection.end();
+
   });
 
 }
