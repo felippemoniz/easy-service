@@ -20,7 +20,8 @@ function findAll(req, res, next) {
 
 function getDates(req, res, next) {
 var data = req.params.data;
-console.log(data)
+
+handleDisconnect();
 query="SELECT distinct(data),diasemana, 0 selecionado FROM "+config.database+".tbsessao " +
       "where data >= '"+data+"' order by data asc"
 
@@ -38,7 +39,7 @@ function findById(req, res, next) {
   var id = req.params.id;
   var data = req.params.data;
 
-
+  handleDisconnect();
   query=  "SELECT * , tbfilme.nome nomeFilme, tbcinema.nome nomeCinema FROM " +
   config.database + ".tbfilme tbfilme, " +
   config.database + ".tbsessao tbsessao, " +
@@ -68,7 +69,7 @@ function findByTheater(req, res, next) {
   var id = req.params.id;
   var data = req.params.data;
 
-
+  handleDisconnect();
   query=  "SELECT * , tbfilme.nome nomeFilme, tbcinema.nome nomeCinema FROM " +
   config.database + ".tbfilme tbfilme, " +
   config.database + ".tbsessao tbsessao, " +
@@ -99,11 +100,11 @@ function findNow(req, res, next) {
   var post;
   var dataAtual = new Date();
   var data = req.params.data;
-  var horaAtual = ("0" + (dataAtual.getHours())).slice(-2) + ("0" + (dataAtual.getMinutes())).slice(-2);
-  var horaAtualMais2Horas = calculaHoraFim(dataAtual.getHours().toString() + ":" + dataAtual.getMinutes().toString(),120)
+  var horaAtual = ("0" + (data.getHours())).slice(-2) + ("0" + (data.getMinutes())).slice(-2);
+  var horaAtualMais2Horas = calculaHoraFim(data.getHours().toString() + ":" + data.getMinutes().toString(),120)
 
-  console.log(horaAtual)
 
+  handleDisconnect();
   query=  "SELECT * , tbfilme.nome nomeFilme, tbcinema.nome nomeCinema FROM " +
   config.database + ".tbfilme tbfilme, " +
   config.database + ".tbsessao tbsessao, " +
@@ -114,7 +115,6 @@ function findNow(req, res, next) {
   "tbsessao.data = '"+data+"' and "+
   "hora between "+horaAtual+" and "+horaAtualMais2Horas+ " order by hora "
 
-    console.log(query)
    console.log("Consultei as sessões AGORA");
 
   connection.query(query, function(err, rows, fields) {
@@ -157,12 +157,38 @@ function contabilizaAcesso(id){
 
   query="UPDATE  " + config.database + ".tbfilme SET qtacesso = qtacesso + 1  WHERE idFilme in ("+ id + ")";
   console.log("Contabilizei os acessos")
+  handleDisconnect();
   connection.query(query, id, function(err, rows, fields) {
       if (err) throw err;
   });
 
 }
 
+function handleDisconnect() {
+  connection = mysql.createConnection({
+        host     : config.host,
+        database : config.database,
+        user     : config.user,
+        password : config.password
+  });
+                                                  // the old one cannot be reused.
+
+  connection.connect(function(err) {              // The server is either down
+    if(err) {                                     // or restarting (takes a while sometimes).
+      console.log('error when connecting to db:', err);
+      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+    }                                     // to avoid a hot loop, and to allow our node script to
+  });                                     // process asynchronous requests in the meantime.
+                                          // If you're also serving http, display a 503 error.
+  connection.on('error', function(err) {
+    console.log('db error', err);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+      handleDisconnect();                         // lost due to either server restart, or a
+    } else {                                      // connnection idle timeout (the wait_timeout
+      throw err;                                  // server variable configures this)
+    }
+  });
+}
 
 function like(req, res, next) {
     var property = req.body;
