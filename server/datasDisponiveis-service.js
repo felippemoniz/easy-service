@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
 function findAll(req, res, next) {
   var query;
   var post;
-
+  handleDisconnect();
   query="SELECT data, false 'selecionado' FROM "+ config.database + ".tbdata;";
 
 
@@ -62,7 +62,7 @@ function findById(req, res, next) {
     res.json(PROPERTIES[id - 1]);
 }
 
-handleDisconnect();
+
 
 exports.findAll = findAll;
 exports.findById = findById;

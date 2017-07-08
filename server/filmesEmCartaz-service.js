@@ -34,7 +34,7 @@ function findFilmesPorSessao(req, res, next) {
   var id = req.params.id;
   var data = req.params.data;
 
-
+  handleDisconnect();
   query=  "SELECT distinct tbfilme.nome nomeFilme, tbfilme.idfilme idfilme, 1 selecionado FROM " +
   config.database + ".tbfilme tbfilme, " +
   config.database + ".tbsessao tbsessao, " +
@@ -63,7 +63,7 @@ function findAll(req, res, next) {
   var filtro = req.params.filtro;
 
   console.log(filtro)
-
+  handleDisconnect();
   query= "SELECT distinct tbfilme.* FROM " +
           config.database +".tbfilme tbfilme,"+
           config.database +".tbsessao tbsessao "+
@@ -128,7 +128,7 @@ function like(req, res, next) {
 }
 
 
-handleDisconnect();
+
 
 
 exports.findAll = findAll;
