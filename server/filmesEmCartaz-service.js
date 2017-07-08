@@ -46,10 +46,11 @@ function findFilmesPorSessao(req, res, next) {
   "tbsessao.data = '"+data+"'" +
   "order by hora "
 
-  
+
   connection.query(query, id, function(err, rows, fields) {
       if (err) throw err;
        res.json(rows);
+       connection.end();
   });
 
 }
@@ -79,6 +80,7 @@ function findAll(req, res, next) {
         throw err;
       }else{
         res.json(rows);
+        connection.end();
       }
 
   });

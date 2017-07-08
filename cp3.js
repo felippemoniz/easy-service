@@ -26,7 +26,7 @@ truncateTables();
 //incluirCinemas(12);
 incluirFilmes(12);
 console.log("### FIM DA CARGA #####");
-connection.destroy();
+
 console.log("### FECHANDO CONEXAO #####");
 //#######################################################################
 
@@ -185,4 +185,4 @@ console.log("Sessoes desse filme incluidas")
 }
 
 
-
+connection.end();
