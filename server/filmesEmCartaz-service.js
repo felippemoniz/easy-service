@@ -88,12 +88,12 @@ function findAll(req, res, next) {
 
 
 function handleDisconnect() {
-  connection = mysql.createConnection(mysql.createConnection({
+  connection = mysql.createConnection({
         host     : config.host,
         database : config.database,
         user     : config.user,
         password : config.password
-  });); // Recreate the connection, since
+  });
                                                   // the old one cannot be reused.
 
   connection.connect(function(err) {              // The server is either down
