@@ -98,10 +98,22 @@ function findByTheater(req, res, next) {
 function findNow(req, res, next) {
   var query;
   var post;
-  var dataAtual = new Date();
   var data = req.params.data;
-  var horaAtual = ("0" + (data.getHours())).slice(-2) + ("0" + (data.getMinutes())).slice(-2);
-  var horaAtualMais2Horas = calculaHoraFim(data.getHours().toString() + ":" + data.getMinutes().toString(),120)
+
+  ano = data.substring(0,4)
+  mes = data.substring(5,7);
+  dia = data.substring(8,10);
+  hora = data.substring(11,13);
+  minuto = data.substring(14,17);
+
+
+  var dataAtual = new Date(ano,parseInt(mes)-1,dia,hora,minuto);
+  var dataReduzida = ano + "-" + mes + "-" + dia;
+
+  var horaAtual = ("0" + (dataAtual.getHours())).slice(-2) + ("0" + (dataAtual.getMinutes())).slice(-2);
+  var horaAtualMais2Horas = calculaHoraFim(dataAtual.getHours().toString() + ":" + dataAtual.getMinutes().toString(),120)
+
+
 
 
   handleDisconnect();
@@ -112,7 +124,7 @@ function findNow(req, res, next) {
   "where  " +
   "tbfilme.idfilme = tbsessao.idfilme and "+
   "tbsessao.idcinema = tbcinema.idcinema and " +
-  "tbsessao.data = '"+data+"' and "+
+  "tbsessao.data = '"+dataReduzida+"' and "+
   "hora between "+horaAtual+" and "+horaAtualMais2Horas+ " order by hora "
 
    console.log("Consultei as sessões AGORA");
@@ -124,6 +136,7 @@ function findNow(req, res, next) {
   });
 
 }
+
 
 
 
