@@ -4,7 +4,7 @@ var http        = require('http');
 var request     = require('request');
 
 
-var connection = mysql.createConnection({
+var pool  = mysql.createPool({
       host     : config.host,
       database : config.database,
       user     : config.user,
@@ -34,7 +34,7 @@ function findFilmesPorSessao(req, res, next) {
   var id = req.params.id;
   var data = req.params.data;
 
-  handleDisconnect();
+
   query=  "SELECT distinct tbfilme.nome nomeFilme, tbfilme.idfilme idfilme, 1 selecionado FROM " +
   config.database + ".tbfilme tbfilme, " +
   config.database + ".tbsessao tbsessao, " +
@@ -47,7 +47,7 @@ function findFilmesPorSessao(req, res, next) {
   "order by hora "
 
 
-  connection.query(query, id, function(err, rows, fields) {
+  pool.query(query, id, function(err, rows, fields) {
       if (err) throw err;
        res.json(rows);
 
@@ -62,8 +62,7 @@ function findAll(req, res, next) {
   var post;
   var filtro = req.params.filtro;
 
-  console.log(filtro)
-  handleDisconnect();
+
   query= "SELECT distinct tbfilme.* FROM " +
           config.database +".tbfilme tbfilme,"+
           config.database +".tbsessao tbsessao "+
@@ -75,7 +74,7 @@ function findAll(req, res, next) {
   console.log("Consultei os filmes em cartaz");
 
 
-  connection.query(query, function(err, rows, fields) {
+  pool.query(query, function(err, rows, fields) {
       if(err) {
         throw err;
       }else{
@@ -84,33 +83,6 @@ function findAll(req, res, next) {
 
   });
 
-}
-
-
-function handleDisconnect() {
-  connection = mysql.createConnection({
-        host     : config.host,
-        database : config.database,
-        user     : config.user,
-        password : config.password
-  });
-                                                  // the old one cannot be reused.
-
-  connection.connect(function(err) {              // The server is either down
-    if(err) {                                     // or restarting (takes a while sometimes).
-      console.log('error when connecting to db:', err);
-      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
-    }                                     // to avoid a hot loop, and to allow our node script to
-  });                                     // process asynchronous requests in the meantime.
-                                          // If you're also serving http, display a 503 error.
-  connection.on('error', function(err) {
-    console.log('db error', err);
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
-      handleDisconnect();                         // lost due to either server restart, or a
-    } else {                                      // connnection idle timeout (the wait_timeout
-      throw err;                                  // server variable configures this)
-    }
-  });
 }
 
 
