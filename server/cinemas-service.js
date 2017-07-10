@@ -2,12 +2,13 @@ var mysql      = require('mysql');
 var config      = require('./config');
 
 
-var connection = mysql.createConnection({
+var pool  = mysql.createPool({
       host     : config.host,
       database : config.database,
       user     : config.user,
       password : config.password
 });
+
 
 
 
@@ -23,7 +24,7 @@ function findAll(req, res, next) {
 
   console.log("Consultei os cinemas");
 
-  connection.query(query, function(err, rows, fields) {
+  pool.query(query, function(err, rows, fields) {
       if(err) {
         throw err;
       }else{
@@ -52,7 +53,7 @@ function findCinemaPorSessao(req, res, next) {
   "tbsessao.data = '"+data+"'"
 
 
-  connection.query(query, id, function(err, rows, fields) {
+  pool.query(query, id, function(err, rows, fields) {
       if (err) throw err;
       res.json(rows);
   });
