@@ -22,11 +22,11 @@ var valoresInsertFilmes = [];
 
 //################## EXECUCAO DA CARGA DAS TABELAS ######################
 console.log("### INICIO DA CARGA ####");
-truncateTables();
+//truncateTables();
 //incluirCinemas(12);
 incluirFilmes(12);
 console.log("### FIM DA CARGA #####");
-
+connection.end();
 console.log("### FECHANDO CONEXAO #####");
 //#######################################################################
 
@@ -128,14 +128,15 @@ function incluirFilmes(idcidade){
 
   }
 
-  query = connection.query('INSERT INTO tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
-      if (err) {console.log(err);}
-  });
+
+//  query = connection.query('INSERT INTO tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
+//      if (err) {console.log(err);}
+//  });
 
 
   query = connection.query('INSERT INTO tbsessao (idsessao,data,diasemana,idcinema,idfilme,diames,hora,tipo) values ?', [valoresInsert], function(err, result) {
-      if (err) {console.log(err);}
-  });
+     if (err) {console.log(err);}
+ });
 
 
   console.log(i+"-Filmes incluidos");
@@ -184,5 +185,30 @@ console.log("Sessoes desse filme incluidas")
 
 }
 
+function handleDisconnect() {
+  connection = mysql.createConnection({
+        host     : config.host,
+        database : config.database,
+        user     : config.user,
+        password : config.password
+  });
+                                                  // the old one cannot be reused.
 
-connection.end();
+  connection.connect(function(err) {              // The server is either down
+    if(err) {                                     // or restarting (takes a while sometimes).
+      console.log('error when connecting to db:', err);
+      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+    }                                     // to avoid a hot loop, and to allow our node script to
+  });                                     // process asynchronous requests in the meantime.
+                                          // If you're also serving http, display a 503 error.
+  connection.on('error', function(err) {
+    console.log('db error', err);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+      handleDisconnect();                         // lost due to either server restart, or a
+    } else {                                      // connnection idle timeout (the wait_timeout
+      throw err;                                  // server variable configures this)
+    }
+  });
+}
+
+
