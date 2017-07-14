@@ -18,8 +18,15 @@ var valoresInsertFilmes = [];
 
 
 function truncateTable(req, res, next){
-  var query1 = pool.query('delete from '+ config.database + '.tbsessao', function(err, fields) {console.log(err);});
-  var query2 = pool.query('delete from '+ config.database + '.tbfilme', function(err, fields) {console.log(err);});
+  var idtabela = req.params.idtabela;
+  if (idtabela=="sessao"){
+      var query1 = pool.query('delete from '+ config.database + '.tbsessao', function(err, fields) {console.log(err);});
+  }
+  
+  if (idtabela=="filme"){
+      var query2 = pool.query('delete from '+ config.database + '.tbfilme', function(err, fields) {console.log(err);});
+  }
+  
   res.json({resposta: "Tabelas Apagadas!"})
 }
 

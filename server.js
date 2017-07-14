@@ -44,7 +44,7 @@ app.get('/oi', function(req, res) {
 
 //ROTINAS DE CARGA
 
-app.get('/apagaTabelas/', carga.truncateTable);
+app.get('/apagaTabelas/:idtabela', carga.truncateTable);
 app.get('/incluirCinema/:idcidade', carga.incluirCinema);
 app.get('/incluirFilmes/:idcidade', carga.incluirFilmes);
 app.get('/terminaConexao', carga.terminaConexao);
