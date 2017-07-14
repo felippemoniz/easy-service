@@ -18,8 +18,8 @@ var valoresInsertFilmes = [];
 
 
 function truncateTable(req, res, next){
-  var query1 = pool.query('delete from easymovie.tbsessao', function(err, fields) {console.log(err);});
-  var query2 = pool.query('delete from easymovie.tbfilme', function(err, fields) {console.log(err);});
+  var query1 = pool.query('delete from '+ config.database + '.tbsessao', function(err, fields) {console.log(err);});
+  var query2 = pool.query('delete from '+ config.database + '.tbfilme', function(err, fields) {console.log(err);});
   res.json({resposta: "Tabelas Apagadas!"})
 }
 
@@ -54,7 +54,7 @@ function incluirCinema(req, res, next){
         selecionado : 0,
         qtacesso : 0 }
 
-        query = pool.query('INSERT INTO tbcinema SET ?', post, function(err, result) {
+        query = pool.query('INSERT INTO '+ config.database + '.tbcinema SET ?', post, function(err, result) {
             if (err) {console.log(err);}
         });
   }
@@ -130,11 +130,11 @@ function incluirFilmes(req, res, next){
 
   }
 
-  query = pool.query('INSERT INTO tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
+  query = pool.query('INSERT INTO '+ config.database + '.tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
       if (err) {console.log(err);}
   });
 
-  query = pool.query('INSERT INTO tbsessao (idsessao,data,diasemana,idcinema,idfilme,diames,hora,tipo) values ?', [valoresInsert], function(err, result) {
+  query = pool.query('INSERT INTO '+ config.database + '.tbsessao (idsessao,data,diasemana,idcinema,idfilme,diames,hora,tipo) values ?', [valoresInsert], function(err, result) {
      if (err) {console.log(err);}
  });
 
