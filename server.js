@@ -8,6 +8,7 @@ var cinemas = require('./server/cinemas-service')
 var datasDisponiveis = require('./server/datasDisponiveis-service')
 var cors = require('cors')
 var config = require('./server/config')
+var carga = require('./server/carga')
 
 
 app.use(cors());
@@ -41,6 +42,12 @@ app.get('/oi', function(req, res) {
   res.json({resposta: "Estou funcionando!"})
 })
 
+//ROTINAS DE CARGA
+
+app.get('/apagaTabelas/', carga.truncateTable);
+app.get('/incluirCinema/:idcidade', carga.incluirCinema);
+app.get('/incluirFilmes/:idcidade', carga.incluirFilmes);
+app.get('/terminaConexao', carga.terminaConexao);
 
 app.listen(config.port)
 

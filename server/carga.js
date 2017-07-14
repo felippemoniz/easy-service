@@ -1,17 +1,14 @@
-
 var mysql      = require('mysql');
+var config      = require('./config');
 var request = require('sync-request');
-var config      = require('./server/config');
 
 
-var connection = mysql.createConnection({
-  host     : config.host,
-  database : config.database,
-  user     : config.user,
-  password : config.password,
-  connectionLimit: 10,
-  acquireTimeout: 10000000 ,
-  port: 3306
+
+var pool  = mysql.createPool({
+      host     : config.host,
+      database : config.database,
+      user     : config.user,
+      password : config.password
 });
 
 
@@ -20,26 +17,19 @@ var valoresInsertFilmes = [];
 
 
 
-//################## EXECUCAO DA CARGA DAS TABELAS ######################
-console.log("### INICIO DA CARGA ####");
-//truncateTables();
-//incluirCinemas(12);
-incluirFilmes(12);
-console.log("### FIM DA CARGA #####");
-connection.end();
-console.log("### FECHANDO CONEXAO #####");
-//#######################################################################
-
-
-function truncateTables(){
-  var query1 = connection.query('delete from easymovie.tbsessao', function(err, fields) {console.log(err);});
-  var query1 = connection.query('delete from easymovie.tbfilme', function(err, fields) {console.log(err);});
-  console.log("Tabelas truncadas")
+function truncateTable(req, res, next){
+  var query1 = pool.query('delete from easymovie.tbsessao', function(err, fields) {console.log(err);});
+  var query2 = pool.query('delete from easymovie.tbfilme', function(err, fields) {console.log(err);});
+  res.json({resposta: "Tabelas Apagadas!"})
 }
 
 
-function incluirCinemas(idcidade){
 
+
+
+function incluirCinema(req, res, next){
+
+ var idcidade = req.params.idcidade;
  var jsonCinemas;
   var i;
   var res = request('GET', 'https://api-content.ingresso.com/v0/theaters/city/'+idcidade);
@@ -64,14 +54,15 @@ function incluirCinemas(idcidade){
         selecionado : 0,
         qtacesso : 0 }
 
-        query = connection.query('INSERT INTO tbcinema SET ?', post, function(err, result) {
+        query = pool.query('INSERT INTO tbcinema SET ?', post, function(err, result) {
             if (err) {console.log(err);}
         });
   }
 
-  console.log(i + "-Cinemas incluidos");
+  res.json({resposta: "Cinemas incluídos"})
 
 }
+
 
 
 
@@ -90,9 +81,20 @@ function concatenaVetor(jsonGenero){
 }
 
 
+function terminaConexao(req, res, next){
 
-function incluirFilmes(idcidade){
+	pool.end(function (err) {
+	  res.json({resposta: "Finalizou conexão!"})
+	});
+
+}
+
+
+function incluirFilmes(req, res, next){
+
+
   console.log("inicio filme")
+  var idcidade = req.params.idcidade;
   var jsonFilmes;
   var i;
   var trailer;
@@ -128,20 +130,19 @@ function incluirFilmes(idcidade){
 
   }
 
+  query = pool.query('INSERT INTO tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
+      if (err) {console.log(err);}
+  });
 
-//  query = connection.query('INSERT INTO tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
-//      if (err) {console.log(err);}
-//  });
-
-
-  query = connection.query('INSERT INTO tbsessao (idsessao,data,diasemana,idcinema,idfilme,diames,hora,tipo) values ?', [valoresInsert], function(err, result) {
+  query = pool.query('INSERT INTO tbsessao (idsessao,data,diasemana,idcinema,idfilme,diames,hora,tipo) values ?', [valoresInsert], function(err, result) {
      if (err) {console.log(err);}
  });
 
-
   console.log(i+"-Filmes incluidos");
+  res.json({resposta: "Carga completa!"})
 
 }
+
 
 
 function incluirSessoes(idfilme,idcidade){
@@ -187,4 +188,12 @@ console.log("Sessoes desse filme incluidas")
 
 
 
+
+
+
+
+exports.incluirFilmes = incluirFilmes;
+exports.incluirCinema = incluirCinema;
+exports.truncateTable = truncateTable;
+exports.terminaConexao = terminaConexao;
 
