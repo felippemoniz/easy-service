@@ -38,7 +38,6 @@ function findById(req, res, next) {
   var id = req.params.id;
   var data = req.params.data;
 
-
   query=  "SELECT * , tbfilme.nome nomeFilme, tbcinema.nome nomeCinema FROM " +
   config.database + ".tbfilme tbfilme, " +
   config.database + ".tbsessao tbsessao, " +
@@ -50,6 +49,35 @@ function findById(req, res, next) {
   "tbsessao.data = '"+data+"'" +
   "order by hora "
 
+  console.log("Consultei as sessões escolhidas");
+
+  pool.query(query, id, function(err, rows, fields) {
+      if (err) throw err;
+      contabilizaAcesso(id);
+      res.json(rows);
+  });
+
+}
+
+
+function findByIdToday(req, res, next) {
+  var query;
+  var post;
+  var id = req.params.id;
+  var data = req.params.data;
+  var hora = req.params.hora;
+
+  query=  "SELECT * , tbfilme.nome nomeFilme, tbcinema.nome nomeCinema FROM " +
+  config.database + ".tbfilme tbfilme, " +
+  config.database + ".tbsessao tbsessao, " +
+  config.database + ".tbcinema tbcinema " +
+  "where  " +
+  "tbfilme.idfilme in ("+id+") and " +
+  "tbfilme.idfilme = tbsessao.idfilme and "+
+  "tbsessao.idcinema = tbcinema.idcinema and " +
+  "tbsessao.data = '"+data+"' and  tbsessao.hora >= '"+hora+"' order by hora "
+
+  console.log(query)
 
   console.log("Consultei as sessões escolhidas");
 
@@ -111,8 +139,6 @@ function findNow(req, res, next) {
 
   var horaAtual = ("0" + (dataAtual.getHours())).slice(-2) + ("0" + (dataAtual.getMinutes())).slice(-2);
   var horaAtualMais2Horas = calculaHoraFim(dataAtual.getHours().toString() + ":" + dataAtual.getMinutes().toString(),120)
-
-
 
 
   query=  "SELECT * , tbfilme.nome nomeFilme, tbcinema.nome nomeCinema FROM " +
@@ -183,6 +209,7 @@ function like(req, res, next) {
 
 exports.findAll = findAll;
 exports.findById = findById;
+exports.findByIdToday = findByIdToday;
 exports.like = like;
 exports.findNow = findNow;
 exports.findByTheater = findByTheater;

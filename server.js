@@ -30,6 +30,8 @@ app.get('/topFilmes/', filmes.getTop6);
 
 app.get('/sessoes/:id/:data', sessoes.findById);
 
+app.get('/sessoesHoje/:id/:data/:hora', sessoes.findByIdToday);
+
 app.get('/cinemasPorSessao/:id/:data', cinemas.findCinemaPorSessao);
 
 app.get('/sessoesAgora/:data', sessoes.findNow);
@@ -50,4 +52,3 @@ app.get('/incluirFilmes/:idcidade', carga.incluirFilmes);
 app.get('/terminaConexao', carga.terminaConexao);
 
 app.listen(config.port)
-
