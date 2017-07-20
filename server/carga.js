@@ -22,11 +22,11 @@ function truncateTable(req, res, next){
   if (idtabela=="sessao"){
       var query1 = pool.query('delete from '+ config.database + '.tbsessao', function(err, fields) {console.log(err);});
   }
-  
+
   if (idtabela=="filme"){
       var query2 = pool.query('delete from '+ config.database + '.tbfilme', function(err, fields) {console.log(err);});
   }
-  
+
   res.json({resposta: "Tabelas Apagadas!"})
 }
 
@@ -146,7 +146,7 @@ function incluirFilmes(req, res, next){
  });
 
   console.log(i+"-Filmes incluidos");
-  res.json({resposta: "Carga completa!"})
+
 
 }
 
@@ -158,36 +158,40 @@ function incluirSessoes(idfilme,idcidade){
   var jsonSalas;
   var z;
   var idsessao ,data, diasemana,idcinema,idfilme,diames,hora, tipo;
+  var respostaString;
 
 
   var res = request('GET', 'https://api-content.ingresso.com/v0/sessions/city/'+idcidade+'/event/'+ idfilme);
-  var respostaString = res.getBody().toString();
-  jsonSessoes=JSON.parse(respostaString);
 
+  if (res.statusCode==200){
+        respostaString = res.getBody().toString();
+        jsonSessoes=JSON.parse(respostaString);
 
+        for (var i = 0; i < jsonSessoes.length; i++) {
+          data = jsonSessoes[i].date;
+          diasemana = jsonSessoes[i].dayOfWeek;
+          jsonCinemas = jsonSessoes[i].theaters;
 
-  for (var i = 0; i < jsonSessoes.length; i++) {
-    data = jsonSessoes[i].date;
-    diasemana = jsonSessoes[i].dayOfWeek;
-    jsonCinemas = jsonSessoes[i].theaters;
+              for (var j = 0; j < jsonCinemas.length; j++) {
+                idcinema = jsonCinemas[j].id;
+                jsonSalas = jsonCinemas[j].rooms[0].sessions;
 
-        for (var j = 0; j < jsonCinemas.length; j++) {
-          idcinema = jsonCinemas[j].id;
-          jsonSalas = jsonCinemas[j].rooms[0].sessions;
+                  for (z = 0; z < jsonSalas.length; z++) {
+                    idsessao = jsonSalas[z].id;
+                    tipo = concatenaVetor(jsonSalas[z].type);
+                    hora= jsonSalas[z].date.hour;
+                    diames = jsonSalas[z].date.dayAndMonth;
 
-            for (z = 0; z < jsonSalas.length; z++) {
-              idsessao = jsonSalas[z].id;
-              tipo = concatenaVetor(jsonSalas[z].type);
-              hora= jsonSalas[z].date.hour;
-              diames = jsonSalas[z].date.dayAndMonth;
+                    valoresInsert.push([idsessao,data,diasemana,idcinema,idfilme,diames,hora.replace(":",""),tipo])
 
-              valoresInsert.push([idsessao,data,diasemana,idcinema,idfilme,diames,hora.replace(":",""),tipo])
+                 }
 
-           }
+            }
 
-      }
-
-  }
+        }
+    }else{
+      console.log('Erro nas sessoes do filme:' + idfilme)
+    }
 
 console.log("Sessoes desse filme incluidas")
 
@@ -203,4 +207,3 @@ exports.incluirFilmes = incluirFilmes;
 exports.incluirCinema = incluirCinema;
 exports.truncateTable = truncateTable;
 exports.terminaConexao = terminaConexao;
-
