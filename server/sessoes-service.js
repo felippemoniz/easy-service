@@ -115,10 +115,40 @@ function findByTheater(req, res, next) {
        res.json(rows);
 
   });
+}
+
+
+function findByTheaterToday(req, res, next) {
+  var query;
+  var post;
+  var id = req.params.id;
+  var data = req.params.data;
+  var hora = req.params.hora;
+
+  console.log("TESDFSADFASDFASDFSADFADS")
+
+  query=  "SELECT * , tbfilme.nome nomeFilme, tbcinema.nome nomeCinema FROM " +
+  config.database + ".tbfilme tbfilme, " +
+  config.database + ".tbsessao tbsessao, " +
+  config.database + ".tbcinema tbcinema " +
+  "where  " +
+  "tbcinema.idcinema in ("+id+") and " +
+  "tbfilme.idfilme = tbsessao.idfilme and "+
+  "tbsessao.idcinema = tbcinema.idcinema and " +
+  "tbsessao.data = '"+data+"' and  tbsessao.hora >= '"+hora+"' order by hora "
+
+  console.log("Consultei as sessões por cinemas escolhidas");
+
+  pool.query(query, id, function(err, rows, fields) {
+      if (err) throw err;
+       res.json(rows);
+
+  });
 
 
 
 }
+
 
 
 
@@ -214,3 +244,4 @@ exports.like = like;
 exports.findNow = findNow;
 exports.findByTheater = findByTheater;
 exports.getDates = getDates;
+exports.findByTheaterToday = findByTheaterToday;

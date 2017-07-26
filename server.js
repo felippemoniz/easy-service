@@ -20,6 +20,8 @@ app.get('/filmesEmCartaz/:filtro', filmes.findAll);
 
 app.get('/sessoesPorCinema/:id/:data', sessoes.findByTheater);
 
+app.get('/sessoesHojePorCinema/:id/:data/:hora', sessoes.findByTheaterToday);
+
 app.get('/filmesPorSessao/:id/:data', filmes.findFilmesPorSessao);
 
 app.get('/cinemas/', cinemas.findAll);
