@@ -198,12 +198,7 @@ console.log("Sessoes desse filme incluidas")
 }
 
 
-
-
-
-
-
-exports.incluirFilmes = incluirFilmes;
-exports.incluirCinema = incluirCinema;
-exports.truncateTable = truncateTable;
+exports.incluirFilmes  = incluirFilmes;
+exports.incluirCinema  = incluirCinema;
+exports.truncateTable  = truncateTable;
 exports.terminaConexao = terminaConexao;
