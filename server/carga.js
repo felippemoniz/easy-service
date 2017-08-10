@@ -156,6 +156,7 @@ function incluirSessoes(idfilme,idcidade){
   var jsonSessoes;
   var jsonCinemas;
   var jsonSalas;
+  var jsonRooms;
   var z;
   var idsessao ,data, diasemana,idcinema,idfilme,diames,hora, tipo;
   var respostaString;
@@ -174,17 +175,22 @@ function incluirSessoes(idfilme,idcidade){
 
               for (var j = 0; j < jsonCinemas.length; j++) {
                 idcinema = jsonCinemas[j].id;
-                jsonSalas = jsonCinemas[j].rooms[0].sessions;
+                jsonSalas = jsonCinemas[j].rooms;
 
-                  for (z = 0; z < jsonSalas.length; z++) {
-                    idsessao = jsonSalas[z].id;
-                    tipo = concatenaVetor(jsonSalas[z].type);
-                    hora= jsonSalas[z].date.hour;
-                    diames = jsonSalas[z].date.dayAndMonth;
+                for (var k=0; k < jsonSalas.length; k++){
+                    jsonRooms = jsonSalas[k].sessions;
 
-                    valoresInsert.push([idsessao,data,diasemana,idcinema,idfilme,diames,hora.replace(":",""),tipo])
+                      for (z = 0; z < jsonRooms.length; z++) {
+                        idsessao = jsonRooms[z].id;
+                        tipo = concatenaVetor(jsonRooms[z].type);
+                        hora= jsonRooms[z].date.hour;
+                        diames = jsonRooms[z].date.dayAndMonth;
 
-                 }
+                        valoresInsert.push([idsessao,data,diasemana,idcinema,idfilme,diames,hora.replace(":",""),tipo])
+
+                     }
+
+                }
 
             }
 
