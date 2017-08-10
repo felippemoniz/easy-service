@@ -21,10 +21,12 @@ function truncateTable(req, res, next){
   var idtabela = req.params.idtabela;
   if (idtabela=="sessao"){
       var query1 = pool.query('delete from '+ config.database + '.tbsessao', function(err, fields) {console.log(err);});
+      console.log("Apaguei as sessoes")
   }
 
   if (idtabela=="filme"){
       var query2 = pool.query('delete from '+ config.database + '.tbfilme', function(err, fields) {console.log(err);});
+      console.log("Apaguei os filmes")
   }
 
   res.json({resposta: "Tabelas Apagadas!"})
@@ -132,17 +134,17 @@ function incluirFilmes(req, res, next){
       ])
 
 
-
    incluirSessoes(jsonFilmes[i].id,idcidade)
+
 
   }
 
   query = pool.query('INSERT INTO '+ config.database + '.tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
-      if (err) {console.log(err);}
+      if (err) {console.log("##Erro na inclusao dos filmes" + err);}
   });
 
-  query = pool.query('INSERT INTO '+ config.database + '.tbsessao (idsessao,data,diasemana,idcinema,idfilme,diames,hora,tipo) values ?', [valoresInsert], function(err, result) {
-     if (err) {console.log(err);}
+ query = pool.query('INSERT INTO '+ config.database + '.tbsessao (idsessao,data,diasemana,idcinema,idfilme,diames,hora,tipo) values ?', [valoresInsert], function(err, result) {
+     if (err) {console.log("##Erro na inclusao das sessoes "+ err);}
  });
 
   console.log(i+"-Filmes incluidos");
@@ -176,6 +178,7 @@ function incluirSessoes(idfilme,idcidade){
               for (var j = 0; j < jsonCinemas.length; j++) {
                 idcinema = jsonCinemas[j].id;
                 jsonSalas = jsonCinemas[j].rooms;
+
 
                 for (var k=0; k < jsonSalas.length; k++){
                     jsonRooms = jsonSalas[k].sessions;
