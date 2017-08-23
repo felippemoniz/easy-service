@@ -54,3 +54,4 @@ app.get('/incluirFilmes/:idcidade', carga.incluirFilmes);
 app.get('/terminaConexao', carga.terminaConexao);
 
 app.listen(config.port)
+console.log("O BD está na porta:" + config.port);
