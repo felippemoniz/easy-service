@@ -38,7 +38,7 @@ function findById(req, res, next) {
   var id = req.params.id;
   var data = req.params.data;
 
-  query=  "SELECT * , tbfilme.nome nomeFilme, tbfilme.imagem imagem2, tbcinema.nome nomeCinema FROM " +
+  query=  "SELECT * , tbfilme.nome nomeFilme, tbfilme.imagem imagem, tbcinema.nome nomeCinema FROM " +
   config.database + ".tbfilme tbfilme, " +
   config.database + ".tbsessao tbsessao, " +
   config.database + ".tbcinema tbcinema " +
@@ -51,11 +51,12 @@ function findById(req, res, next) {
 
   console.log("Consultei as sessões escolhidas");
 
+
   pool.query(query, id, function(err, rows, fields) {
       if (err) throw err;
       contabilizaAcesso(id);
       res.json(rows);
-  });
+   });
 
 }
 
