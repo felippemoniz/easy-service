@@ -68,7 +68,7 @@ function findByIdToday(req, res, next) {
   var data = req.params.data;
   var hora = req.params.hora;
 
-  query=  "SELECT * , tbfilme.nome nomeFilme, tbcinema.nome nomeCinema FROM " +
+  query=  "SELECT * , tbfilme.nome nomeFilme, tbfilme.imagem imagem2, tbcinema.nome nomeCinema FROM " +
   config.database + ".tbfilme tbfilme, " +
   config.database + ".tbsessao tbsessao, " +
   config.database + ".tbcinema tbcinema " +
@@ -126,7 +126,6 @@ function findByTheaterToday(req, res, next) {
   var data = req.params.data;
   var hora = req.params.hora;
 
-  console.log("TESDFSADFASDFASDFSADFADS")
 
   query=  "SELECT * , tbfilme.nome nomeFilme, tbcinema.nome nomeCinema FROM " +
   config.database + ".tbfilme tbfilme, " +
