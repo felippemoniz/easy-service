@@ -121,6 +121,7 @@ function incluirFilmes(req, res, next){
 
     valoresInsertFilmes.push([jsonFilmes[i].id,
       jsonFilmes[i].title,
+      jsonFilmes[i].priority,
       jsonFilmes[i].contentRating,
       jsonFilmes[i].duration,
       6,
@@ -139,7 +140,7 @@ function incluirFilmes(req, res, next){
 
   }
 
-  query = pool.query('INSERT INTO '+ config.database + '.tbfilme (idfilme,nome,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
+  query = pool.query('INSERT INTO '+ config.database + '.tbfilme (idfilme,nome,prioridade,classificacao,duracao,notaimdb,sinopse,cast,diretor,genero,poster,imagem,linktrailer,selecionado,qtacesso) values ?', [valoresInsertFilmes], function(err, result) {
       if (err) {console.log("##Erro na inclusao dos filmes" + err);}
   });
 

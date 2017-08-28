@@ -56,6 +56,19 @@ function findFilmesPorSessao(req, res, next) {
 }
 
 
+function findEstreiaSemana(req, res, next){
+var query;
+var post;
+
+  query=  "SELECT * FROM " +
+  config.database + ".tbfilme tbfilme " +
+  "where  " +
+  "tbfilme.prioridade = 1 "
+
+}
+
+
+
 function findAll(req, res, next) {
 
   var query;
@@ -104,6 +117,7 @@ function like(req, res, next) {
 
 
 exports.findAll = findAll;
+exports.findEstreiaSemana = findEstreiaSemana;
 exports.getTop6 = getTop6;
 exports.findById = findById;
 exports.findFilmesPorSessao = findFilmesPorSessao;

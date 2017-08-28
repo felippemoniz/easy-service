@@ -28,6 +28,8 @@ app.get('/cinemas/', cinemas.findAll);
 
 app.get('/filmesEmCartaz/', filmes.findAll);
 
+app.get('/filmeEstreiaDaSemana/', filmes.findEstreiaSemana);
+
 app.get('/topFilmes/', filmes.getTop6);
 
 app.get('/sessoes/:id/:data', sessoes.findById);
