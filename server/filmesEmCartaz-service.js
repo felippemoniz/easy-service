@@ -65,6 +65,15 @@ var post;
   "where  " +
   "tbfilme.prioridade = 1 "
 
+  pool.query(query, function(err, rows, fields) {
+      if(err) {
+        throw err;
+      }else{
+        res.json(rows);
+      }
+
+  });
+
 }
 
 
