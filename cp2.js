@@ -28,7 +28,7 @@ console.log("### FIM DA CARGA #####");
 function atualizaSinopsePoster(){
 var json;
 var query;
- 
+
 connection.query("SELECT distinct nome FROM easymovie.tbfilme", function(err, rows, fields) {
     if (err) throw err;
 
@@ -37,7 +37,7 @@ connection.query("SELECT distinct nome FROM easymovie.tbfilme", function(err, ro
         if (json.total_results > 0) {
         	query=connection.query('update easymovie.tbfilme SET poster=?, imagem=?, sinopse=?, notaimdb=? WHERE nome = ?', ["https://image.tmdb.org/t/p/w500"+json.results[0].poster_path,"https://image.tmdb.org/t/p/w500"+json.results[0].backdrop_path,json.results[0].overview,json.results[0].imdb, rows[i].nome],  function(err, result) {
         	});
-        }  
+        }
     }
 });
 

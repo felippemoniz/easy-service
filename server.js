@@ -53,6 +53,7 @@ app.get('/oi', function(req, res) {
 app.get('/apagaTabelas/:idtabela', carga.truncateTable);
 app.get('/incluirCinema/:idcidade', carga.incluirCinema);
 app.get('/incluirFilmes/:idcidade', carga.incluirFilmes);
+app.get('/incluirNota', carga.incluirNota);
 app.get('/terminaConexao', carga.terminaConexao);
 
 app.listen(config.port)

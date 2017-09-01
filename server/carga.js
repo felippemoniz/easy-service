@@ -124,7 +124,7 @@ function incluirFilmes(req, res, next){
       jsonFilmes[i].priority,
       jsonFilmes[i].contentRating,
       jsonFilmes[i].duration,
-      6,
+      0,
       jsonFilmes[i].synopsis,
       jsonFilmes[i].cast,
       jsonFilmes[i].director,
@@ -208,6 +208,55 @@ console.log("Sessoes desse filme incluidas")
 }
 
 
+
+function incluirNota(){
+var json;
+var query;
+
+query = pool.query("SELECT distinct nome FROM "+config.database"+.tbfilme", function(err, rows, fields) {
+    if (err) throw err;
+
+    for (var i in rows) {
+    	json=recuperaInfo(rows[i].nome);
+        if (json.total_results > 0) {
+
+			 query = pool.query('update '+ config.database + '.tbfilme SET notaimdb=? WHERE nome = ?', [json.results[0].imdb, rows[i].nome], function(err, result) {
+			     if (err) {console.log("##Erro na inclusão das notas IMDB"+ err);}
+ 			  });
+
+        }
+    }
+});
+
+}
+
+
+function recuperaInfo(nome){
+   var json = [];
+   var id;
+
+
+	console.log("______________________________")
+  	console.log("Vou fazer com :" + nome)
+	var res = request('GET', 'http://api.themoviedb.org/3/search/movie?query=&query='+nome+'&language=pt-BR&api_key=5fbddf6b517048e25bc3ac1bbeafb919');
+  	json=JSON.parse(res.getBody());
+
+
+	  if (json.total_results > 0){
+		console.log("Pegando IMDB")
+		res2 = request('GET', 'http://www.omdbapi.com/?t='+json.results[0].original_title+'&apikey=5e485ed3');
+		json2=JSON.parse(res2.getBody());
+		console.log(json2.imdbRating)
+		json.results[0].imdb = json2.imdbRating
+	  }
+
+	return json;
+
+}
+
+
+
+exports.atualizaimdb = atualizaimdb;
 exports.incluirFilmes  = incluirFilmes;
 exports.incluirCinema  = incluirCinema;
 exports.truncateTable  = truncateTable;
