@@ -213,7 +213,7 @@ function incluirNota(){
 var json;
 var query;
 
-query = pool.query("SELECT distinct nome FROM "+config.database"+.tbfilme", function(err, rows, fields) {
+query = pool.query("SELECT distinct nome FROM "+config.database+".tbfilme", function(err, rows, fields) {
     if (err) throw err;
 
     for (var i in rows) {
@@ -256,7 +256,7 @@ function recuperaInfo(nome){
 
 
 
-exports.atualizaimdb = atualizaimdb;
+exports.incluirNota = incluirNota;
 exports.incluirFilmes  = incluirFilmes;
 exports.incluirCinema  = incluirCinema;
 exports.truncateTable  = truncateTable;
