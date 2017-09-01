@@ -231,6 +231,8 @@ query = pool.query("SELECT distinct nome FROM "+config.database+".tbfilme", func
 }
 
 
+
+
 function recuperaInfo(nome){
    var json = [];
    var id;
@@ -246,8 +248,10 @@ function recuperaInfo(nome){
 		console.log("Pegando IMDB")
 		res2 = request('GET', 'http://www.omdbapi.com/?t='+json.results[0].original_title+'&apikey=5e485ed3');
 		json2=JSON.parse(res2.getBody());
-		console.log(json2.imdbRating)
-		json.results[0].imdb = json2.imdbRating
+		console.log("Deu certo? " + json2.Response)
+		if (json2.Response == "True"){
+			json.results[0].imdb = json2.imdbRating
+		}
 	  }
 
 	return json;
