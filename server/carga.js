@@ -14,6 +14,7 @@ var pool  = mysql.createPool({
 
 var valoresInsert =[];
 var valoresInsertFilmes = [];
+var valoresUpdateFilmes = [];
 
 
 
@@ -211,49 +212,58 @@ console.log("Sessoes desse filme incluidas")
 
 function incluirNota(){
 var json;
-var query;
+var query,query2;
+var nota;
 
 query = pool.query("SELECT distinct nome FROM "+config.database+".tbfilme", function(err, rows, fields) {
-    if (err) throw err;
 
-    for (var i in rows) {
-    	json=recuperaInfo(rows[i].nome);
-        if (json.total_results > 0) {
+      if (err) throw err;
 
-			 query = pool.query('update '+ config.database + '.tbfilme SET notaimdb=? WHERE nome = ?', [json.results[0].imdb, rows[i].nome], function(err, result) {
-			     if (err) {console.log("##Erro na inclusão das notas IMDB"+ err);}
- 			  });
+      for (var i in rows) {
+      	  json=recuperaInfo(rows[i].nome);
 
-        }
-    }
+
+          if (json != "" && json.total_results > 0) {
+            nota = json.results[0].imdb;
+            if (nota=='N/A' || nota==null){nota=0}
+
+                  query2 = pool.query('update '+ config.database + '.tbfilme SET notaimdb=? WHERE nome=?', [nota,rows[i].nome], function(err, result) {
+                  if (err) {
+                    console.log("Erro:" + err);
+                  }
+                  });
+          }
+      }
+
 });
 
-}
+
+} 
+
 
 
 
 
 function recuperaInfo(nome){
-   var json = [];
+   var json=""
    var id;
 
 
-	console.log("______________________________")
-  	console.log("Vou fazer com :" + nome)
 	var res = request('GET', 'http://api.themoviedb.org/3/search/movie?query=&query='+nome+'&language=pt-BR&api_key=5fbddf6b517048e25bc3ac1bbeafb919');
-  	json=JSON.parse(res.getBody());
+  if (res.statusCode==200){
 
+      var respostaString = res.getBody().toString();
+      json=JSON.parse(respostaString);
 
-	  if (json.total_results > 0){
-		console.log("Pegando IMDB")
-		res2 = request('GET', 'http://www.omdbapi.com/?t='+json.results[0].original_title+'&apikey=5e485ed3');
-		json2=JSON.parse(res2.getBody());
-		console.log("Deu certo? " + json2.Response)
-		if (json2.Response == "True"){
-			json.results[0].imdb = json2.imdbRating
-		}
-	  }
-
+    	  if (json.total_results > 0){
+        		res2 = request('GET', 'http://www.omdbapi.com/?t='+json.results[0].original_title+'&apikey=5e485ed3');
+        		json2=JSON.parse(res2.getBody());
+          		if (json2.Response == "True"){
+                console.log(nome + "= " + json2.imdbRating)
+          			json.results[0].imdb = json2.imdbRating
+          		}
+    	  }
+  }
 	return json;
 
 }
