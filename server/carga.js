@@ -231,6 +231,7 @@ query = pool.query("SELECT distinct nome FROM "+config.database+".tbfilme", func
                   if (err) {
                     console.log("Erro:" + err);
                   }
+                  pool.release();
                   });
           }
       }
