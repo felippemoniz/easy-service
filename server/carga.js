@@ -8,7 +8,8 @@ var pool  = mysql.createPool({
       host     : config.host,
       database : config.database,
       user     : config.user,
-      password : config.password
+      password : config.password,
+      multipleStatements: true
 });
 
 
@@ -212,7 +213,7 @@ console.log("Sessoes desse filme incluidas")
 
 function incluirNota(){
 var json;
-var query,query2;
+var query,query2, queries="";
 var nota;
 
 query = pool.query("SELECT distinct nome FROM "+config.database+".tbfilme", function(err, rows, fields) {
@@ -222,21 +223,33 @@ query = pool.query("SELECT distinct nome FROM "+config.database+".tbfilme", func
       for (var i in rows) {
       	  json=recuperaInfo(rows[i].nome);
 
-
           if (json != "" && json.total_results > 0) {
-            nota = json.results[0].imdb;
-            if (nota=='N/A' || nota==null){nota=0}
+              nota = json.results[0].imdb;
+              if (nota=='N/A' || nota==null){nota=0}
 
-                  query2 = pool.query('update '+ config.database + '.tbfilme SET notaimdb=? WHERE nome=?', [nota,rows[i].nome], function(err, result) {
-                  if (err) {
-                    console.log("Erro:" + err);
-                  }
-                  pool.release();
-                  });
+              valoresUpdateFilmes.push([nota,rows[i].nome]);
           }
       }
 
+
+valoresUpdateFilmes.forEach(function (item) {
+  queries += mysql.format('update '+ config.database + '.tbfilme SET notaimdb=? WHERE nome=?; ', item);
 });
+
+
+query2 = pool.query(queries, function(err, result) { 
+if (err) {
+  console.log("Erro:" + err);
+}
+console.log("Notas IMDB carregadas!")
+});
+
+
+});
+
+
+
+
 
 
 } 
