@@ -235,7 +235,7 @@ query = pool.query("SELECT distinct nome FROM "+config.database+".tbfilme", func
 valoresUpdateFilmes.forEach(function (item) {
   queries += mysql.format('update '+ config.database + '.tbfilme SET notaimdb=? WHERE nome=?; ', item);
 });
-
+ 
 
 query2 = pool.query(queries, function(err, result) { 
 if (err) {
@@ -263,7 +263,8 @@ function recuperaInfo(nome){
    var id;
 
 
-	var res = request('GET', 'http://api.themoviedb.org/3/search/movie?query=&query='+nome+'&language=pt-BR&api_key=5fbddf6b517048e25bc3ac1bbeafb919');
+	var res = request('GET', 'http://api.themoviedb.org/3/search/movie?query=&query='+removerAcentos(nome)+'&language=pt-BR&api_key=5fbddf6b517048e25bc3ac1bbeafb919');
+
   if (res.statusCode==200){
 
       var respostaString = res.getBody().toString();
@@ -280,6 +281,28 @@ function recuperaInfo(nome){
   }
 	return json;
 
+}
+
+
+
+function removerAcentos( newStringComAcento ) {
+  var string = newStringComAcento;
+  var mapaAcentosHex  = {
+    a : /[\xE0-\xE6]/g,
+    e : /[\xE8-\xEB]/g,
+    i : /[\xEC-\xEF]/g,
+    o : /[\xF2-\xF6]/g,
+    u : /[\xF9-\xFC]/g,
+    c : /\xE7/g,
+    n : /\xF1/g
+  };
+
+  for ( var letra in mapaAcentosHex ) {
+    var expressaoRegular = mapaAcentosHex[letra];
+    string = string.replace( expressaoRegular, letra );
+  }
+
+  return string;
 }
 
 
